@@ -1,0 +1,29 @@
+name: Android CI with Linters
+
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop, main]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run KtLint
+        run: ./gradlew ktlintCheck
+
+      - name: Run DeteKt
+        run: ./gradlew detekt
+
+      - name: Run Android Lint
+        run: ./gradlew lint
