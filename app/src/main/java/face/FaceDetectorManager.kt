@@ -22,8 +22,7 @@ class FaceDetectorManager {
             .addOnSuccessListener { faces ->
                 if (faces.isNotEmpty()) {
                     val face = faces[0]
-                    val box = face.boundingBox
-                    // faça algo com box
+                    face.boundingBox
                 } else {
                     println("Nenhum rosto detectado")
                 }
