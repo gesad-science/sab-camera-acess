@@ -1,6 +1,7 @@
 package face
 
 import android.graphics.Bitmap
+import android.util.Log
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
@@ -24,7 +25,7 @@ class FaceDetectorManager {
                     val face = faces[0]
                     face.boundingBox
                 } else {
-                    println("Nenhum rosto detectado")
+                    Log.w("FaceDetectorManager", "No face detected")
                 }
             }.addOnFailureListener { e ->
                 e.printStackTrace()
