@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">CameraAcess</string>
+    <string name="open_camera">Open Camera</string>
+    <string name="detection_system">DETECTION SYSTEM</string>
+    <string name="open_gallery">Open Gallery</string>
 </resources>
