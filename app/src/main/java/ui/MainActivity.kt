@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.ImageCapture
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
 import photos.PhotoManager
@@ -18,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var photoManager: PhotoManager
     private lateinit var faceDetectorManager: FaceDetectorManager
     private lateinit var cameraExecutor: ExecutorService
-    //private var imageCapture: ImageCapture? = null
+    // private var imageCapture: ImageCapture? = null
 
     private val requestPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
