@@ -38,7 +38,16 @@ android {
 }
 
 dependencies {
-    implementation("com.google.mlkit:face-detection:16.1.7")
+    implementation(libs.vision.common)
+    implementation(libs.play.services.mlkit.face.detection)
+    val cameraXVersion = "1.5.0"
+    implementation("androidx.camera:camera-core:$cameraXVersion")
+    implementation("androidx.camera:camera-camera2:$cameraXVersion")
+    implementation("androidx.camera:camera-lifecycle:$cameraXVersion")
+    implementation("androidx.camera:camera-video:$cameraXVersion")
+    implementation("androidx.camera:camera-view:$cameraXVersion")
+    implementation("androidx.camera:camera-mlkit-vision:$cameraXVersion")
+    implementation("androidx.camera:camera-extensions:$cameraXVersion")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

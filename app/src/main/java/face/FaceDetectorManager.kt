@@ -1,8 +1,8 @@
 package face
 
-import android.graphics.Bitmap
 import android.util.Log
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
 
@@ -15,20 +15,22 @@ class FaceDetectorManager {
 
     private val detector = FaceDetection.getClient(options)
 
-    fun detectFaces(bitmap: Bitmap) {
-        val image = InputImage.fromBitmap(bitmap, 0)
-
+    fun detectFaces(
+        input: InputImage,
+        onResult: (List<Face>) -> Unit,
+    ) {
         detector
-            .process(image)
+            .process(input)
             .addOnSuccessListener { faces ->
                 if (faces.isNotEmpty()) {
-                    val face = faces[0]
-                    face.boundingBox
+                    onResult(faces)
                 } else {
-                    Log.w("FaceDetectorManager", "No face detected")
+                    Log.w("FaceDetectorManager", "Nenhum rosto detectado")
+                    onResult(emptyList())
                 }
             }.addOnFailureListener { e ->
-                e.printStackTrace()
+                Log.e("FaceDetectorManager", "Erro na detecção", e)
+                onResult(emptyList())
             }
     }
 }
