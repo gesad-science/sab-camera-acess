@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, CameraActivity::class.java)
                 startActivity(intent)
             } else {
-                Log.e("CameraX", "Permissão negada")
+                Log.e("CameraX", "Permission denied")
             }
         }
 

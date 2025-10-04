@@ -27,11 +27,11 @@ class FaceDetectorManager {
                 if (faces.isNotEmpty()) {
                     onResult(faces)
                 } else {
-                    Log.w("FaceDetectorManager", "Nenhum rosto detectado")
+                    Log.w("FaceDetectorManager", "No face detected")
                     onResult(emptyList())
                 }
             }.addOnFailureListener { e ->
-                Log.e("FaceDetectorManager", "Erro na detecção", e)
+                Log.e("FaceDetectorManager", "Detection error", e)
                 onResult(emptyList())
             }
     }
