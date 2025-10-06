@@ -111,7 +111,7 @@ class CameraActivity : AppCompatActivity() {
             faceOverlayView.setFaces(rects)
         }
         for (face in faces) {
-            Log.d("CameraActivity", "Rosto detectado: ${face.boundingBox}")
+            Log.d("CameraActivity", "Face detected: ${face.boundingBox}")
         }
     }
 
