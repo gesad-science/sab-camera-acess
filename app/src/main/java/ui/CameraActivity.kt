@@ -79,7 +79,7 @@ class CameraActivity : AppCompatActivity() {
                             }
                         }
                     }
-            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
             try {
                 cameraProvider.unbindAll()
                 cameraProvider.bindToLifecycle(
@@ -104,7 +104,7 @@ class CameraActivity : AppCompatActivity() {
         val imageHeight = mediaImage.height
         val rects =
             faces.map { face ->
-                mapRectToView(face.boundingBox, imageWidth, imageHeight, true)
+                mapRectToView(face.boundingBox, imageWidth, imageHeight, false)
             }
 
         runOnUiThread {
