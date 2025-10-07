@@ -33,7 +33,10 @@ class FaceDetectorManager {
                     onResult(emptyList())
                 }
             }.addOnFailureListener { e ->
-                LogHelper.log(context, "Detection error")
+                LogHelper.log(context, "Detection error: ${e.message ?: "Unknown error"}")
+                e.stackTrace.forEach {
+                    LogHelper.log(context, it.toString())
+                }
                 onResult(emptyList())
             }
     }
