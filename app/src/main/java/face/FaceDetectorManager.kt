@@ -1,10 +1,11 @@
 package face
 
-import android.util.Log
+import android.content.Context
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import files.LogHelper
 
 class FaceDetectorManager {
     private val options =
@@ -18,6 +19,7 @@ class FaceDetectorManager {
     private val detector = FaceDetection.getClient(options)
 
     fun detectFaces(
+        context: Context,
         input: InputImage,
         onResult: (List<Face>) -> Unit,
     ) {
@@ -27,11 +29,11 @@ class FaceDetectorManager {
                 if (faces.isNotEmpty()) {
                     onResult(faces)
                 } else {
-                    Log.w("FaceDetectorManager", "No face detected")
+                    LogHelper.log(context, "No face detected")
                     onResult(emptyList())
                 }
             }.addOnFailureListener { e ->
-                Log.e("FaceDetectorManager", "Detection error", e)
+                LogHelper.log(context, "Detection error")
                 onResult(emptyList())
             }
     }

@@ -2,7 +2,6 @@ package ui
 
 import android.media.Image
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
@@ -16,6 +15,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
+import files.LogHelper
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -65,7 +65,7 @@ class CameraActivity : AppCompatActivity() {
                                             imageProxy.imageInfo.rotationDegrees,
                                         )
 
-                                faceDetectorManager.detectFaces(inputImage) { faces ->
+                                faceDetectorManager.detectFaces(this, inputImage) { faces ->
                                     if (faces.isNotEmpty()) {
                                         instanceFaceDetect(mediaImage, faces)
                                     }
@@ -104,14 +104,14 @@ class CameraActivity : AppCompatActivity() {
         val imageHeight = mediaImage.height
         val rects =
             faces.map { face ->
-                mapRectToView(face.boundingBox, imageWidth, imageHeight, true)
+                mapRectToView(face.boundingBox, imageWidth, imageHeight, false)
             }
 
         runOnUiThread {
             faceOverlayView.setFaces(rects)
         }
         for (face in faces) {
-            Log.d("CameraActivity", "Face detected: ${face.boundingBox}")
+            LogHelper.log(this, "Face detected: ${face.boundingBox}")
         }
     }
 

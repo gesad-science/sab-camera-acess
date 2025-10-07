@@ -3,12 +3,12 @@ package ui
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
+import files.LogHelper
 import photos.PhotoManager
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this, CameraActivity::class.java)
                 startActivity(intent)
             } else {
-                Log.e("CameraX", "Permission denied")
+                LogHelper.log(this, "Permission denied")
             }
         }
 
