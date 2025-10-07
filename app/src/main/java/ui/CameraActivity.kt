@@ -104,7 +104,7 @@ class CameraActivity : AppCompatActivity() {
         val imageHeight = mediaImage.height
         val rects =
             faces.map { face ->
-                mapRectToView(face.boundingBox, imageWidth, imageHeight, false)
+                mapRectToView(face.boundingBox, imageWidth, imageHeight, true)
             }
 
         runOnUiThread {
