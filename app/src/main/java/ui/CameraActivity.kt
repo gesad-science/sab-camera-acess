@@ -19,6 +19,8 @@ import files.LogHelper
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+const val ROTATION_DEGREES_MIN = 0
+const val ROTATION_DEGREES_MAX = 180
 class CameraActivity : AppCompatActivity() {
     private lateinit var previewView: PreviewView
     private lateinit var faceDetectorManager: FaceDetectorManager
@@ -67,7 +69,7 @@ class CameraActivity : AppCompatActivity() {
 
                                 faceDetectorManager.detectFaces(this, inputImage) { faces ->
                                     if (faces.isNotEmpty()) {
-                                        instanceFaceDetect(mediaImage, faces)
+                                        instanceFaceDetect(mediaImage, faces, imageProxy.imageInfo.rotationDegrees)
                                     }
                                     imageProxy.close()
                                 }
@@ -99,17 +101,19 @@ class CameraActivity : AppCompatActivity() {
     fun instanceFaceDetect(
         mediaImage: Image,
         faces: List<Face>,
+        rotationDegrees: Int,
     ) {
         val imageWidth = mediaImage.width
         val imageHeight = mediaImage.height
         val rects =
             faces.map { face ->
-                mapRectToView(face.boundingBox, imageWidth, imageHeight, true)
+                mapRectToView(face.boundingBox, imageWidth, imageHeight, rotationDegrees, false)
             }
 
         runOnUiThread {
             faceOverlayView.setFaces(rects)
         }
+
         for (face in faces) {
             LogHelper.log(this, "Face detected: ${face.boundingBox}")
         }
@@ -119,13 +123,22 @@ class CameraActivity : AppCompatActivity() {
         rect: android.graphics.Rect,
         imageWidth: Int,
         imageHeight: Int,
+        rotationDegrees: Int,
         isFrontCamera: Boolean,
     ): android.graphics.Rect {
         val viewWidth = previewView.width.toFloat()
         val viewHeight = previewView.height.toFloat()
 
-        val scaleX = viewWidth / imageHeight.toFloat()
-        val scaleY = viewHeight / imageWidth.toFloat()
+        val scaleX: Float
+        val scaleY: Float
+
+        if (rotationDegrees == ROTATION_DEGREES_MIN || rotationDegrees == ROTATION_DEGREES_MAX) {
+            scaleX = viewWidth / imageWidth
+            scaleY = viewHeight / imageHeight
+        } else {
+            scaleX = viewWidth / imageHeight
+            scaleY = viewHeight / imageWidth
+        }
 
         var left = rect.left * scaleX
         var top = rect.top * scaleY
@@ -139,7 +152,12 @@ class CameraActivity : AppCompatActivity() {
             right = flippedRight
         }
 
-        return android.graphics.Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
+        return android.graphics.Rect(
+            left.toInt(),
+            top.toInt(),
+            right.toInt(),
+            bottom.toInt(),
+        )
     }
 
     override fun onDestroy() {
