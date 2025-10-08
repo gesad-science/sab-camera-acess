@@ -3,9 +3,10 @@ package ui
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ImageButton
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
 import files.LogHelper
@@ -35,12 +36,12 @@ class MainActivity : AppCompatActivity() {
         photoManager = PhotoManager(this)
         faceDetectorManager = FaceDetectorManager()
         cameraExecutor = Executors.newSingleThreadExecutor()
-
-        findViewById<Button>(R.id.buttonGallery).setOnClickListener {
+        window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+        /*findViewById<Button>(R.id.buttonGallery).setOnClickListener {
             startActivity(Intent(this, GalleryActivity::class.java))
-        }
+        }*/
 
-        findViewById<Button>(R.id.buttonCamera).setOnClickListener {
+        findViewById<ImageButton>(R.id.buttonCameraIcon).setOnClickListener {
             requestPermission.launch(Manifest.permission.CAMERA)
         }
     }

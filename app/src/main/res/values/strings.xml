@@ -3,4 +3,7 @@
     <string name="open_camera">Open Camera</string>
     <string name="detection_system">DETECTION SYSTEM</string>
     <string name="open_gallery">Open Gallery</string>
+    <string name="face_detection_system">Face Detection System</string>
+    <string name="use_the_camera_to_test_the_facial_recognition_system">Use the camera to test the Facial Recognition System</string>
+    <string name="tap_the_icon_to_open_the_camera">Tap the icon to open the Camera</string>
 </resources>

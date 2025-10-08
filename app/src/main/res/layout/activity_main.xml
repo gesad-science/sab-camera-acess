@@ -6,58 +6,72 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     tools:context="ui.MainActivity">
-
-    <androidx.camera.view.PreviewView
-        android:id="@+id/previewView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/gradient"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:fontFamily="sans-serif-black"
-        android:shadowColor="#66000000"
-        android:shadowDx="2"
-        android:shadowDy="2"
-        android:shadowRadius="3"
-        android:text="@string/detection_system"
+        android:text="@string/face_detection_system"
         android:textColor="@android:color/white"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="@+id/buttonGallery"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginTop="48dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/buttonCamera"
-        android:layout_width="192dp"
-        android:layout_height="49dp"
-        android:text="@string/open_camera"
-        app:layout_constraintBottom_toBottomOf="@+id/previewView"
+    <TextView
+        android:id="@+id/textViewSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/use_the_camera_to_test_the_facial_recognition_system"
+        android:textColor="#CCFFFFFF"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/buttonCameraIcon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="172dp"
+        android:background="@drawable/circle_button_bg"
+        android:contentDescription="@string/open_camera"
+        android:padding="20dp"
+        android:src="@drawable/baseline_photo_camera_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewSubtitle"
+        app:tint="@android:color/white" />
+
+    <TextView
+        android:id="@+id/textViewHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:text="@string/tap_the_icon_to_open_the_camera"
+        android:textColor="#CCFFFFFF"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@id/buttonCameraIcon" />
 
-    <Button
-        android:id="@+id/buttonGallery"
-        android:layout_width="192dp"
-        android:layout_height="49dp"
-        android:text="@string/open_gallery"
+    <ImageView
+        android:layout_width="129dp"
+        android:layout_height="75dp"
+        android:layout_marginBottom="32dp"
+        android:src="@drawable/engrenagemlogo"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/previewView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
