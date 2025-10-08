@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 
 const val STROKE_WIDTH = 5f
+const val CORNER_LENGTH = 30f
 
 class FaceOverlayView(
     context: Context,
@@ -30,7 +31,59 @@ class FaceOverlayView(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         for (face in faces) {
-            canvas.drawRect(face, paint)
+            drawFaceCorners(canvas, face)
         }
+    }
+
+    private fun drawFaceCorners(
+        canvas: Canvas,
+        face: Rect,
+    ) {
+        val corners =
+            listOf(
+                Pair(face.left.toFloat(), face.top.toFloat()),
+                Pair(face.right.toFloat(), face.top.toFloat()),
+                Pair(face.left.toFloat(), face.bottom.toFloat()),
+                Pair(face.right.toFloat(), face.bottom.toFloat()),
+            )
+
+        corners.forEach { (x, y) ->
+            drawCorner(canvas, x, y, face)
+        }
+    }
+
+    private fun drawCorner(
+        canvas: Canvas,
+        x: Float,
+        y: Float,
+        face: Rect,
+    ) {
+        val horizontal =
+            if (x > (face.left + face.right) / 2) {
+                -CORNER_LENGTH
+            } else {
+                CORNER_LENGTH
+            }
+        val vertical =
+            if (y > (face.top + face.bottom) / 2) {
+                -CORNER_LENGTH
+            } else {
+                CORNER_LENGTH
+            }
+        canvas.drawLine(
+            x,
+            y,
+            x + horizontal,
+            y,
+            paint,
+        )
+
+        canvas.drawLine(
+            x,
+            y,
+            x,
+            y + vertical,
+            paint,
+        )
     }
 }

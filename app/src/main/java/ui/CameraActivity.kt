@@ -19,8 +19,13 @@ import files.LogHelper
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-const val ROTATION_DEGREES_MIN = 0
-const val ROTATION_DEGREES_MAX = 180
+const val MIN_VALUE_CORCE = 0f
+const val ROTATION_DEGREES_MIN = 90
+const val ROTATION_DEGREES_MAX = 270
+const val WIDTH_FACTOR = 1f
+const val HEIGHT_FACTOR = 1.3f
+const val DIVISOR_SCALE = 2f
+
 class CameraActivity : AppCompatActivity() {
     private lateinit var previewView: PreviewView
     private lateinit var faceDetectorManager: FaceDetectorManager
@@ -131,13 +136,12 @@ class CameraActivity : AppCompatActivity() {
 
         val scaleX: Float
         val scaleY: Float
-
         if (rotationDegrees == ROTATION_DEGREES_MIN || rotationDegrees == ROTATION_DEGREES_MAX) {
-            scaleX = viewWidth / imageWidth
-            scaleY = viewHeight / imageHeight
-        } else {
             scaleX = viewWidth / imageHeight
             scaleY = viewHeight / imageWidth
+        } else {
+            scaleX = viewWidth / imageWidth
+            scaleY = viewHeight / imageHeight
         }
 
         var left = rect.left * scaleX
@@ -151,12 +155,39 @@ class CameraActivity : AppCompatActivity() {
             left = flippedLeft
             right = flippedRight
         }
+        if (rotationDegrees != ROTATION_DEGREES_MIN && rotationDegrees != ROTATION_DEGREES_MAX) {
+            val cx = (left + right) / DIVISOR_SCALE
+            val cy = (top + bottom) / DIVISOR_SCALE
+            val halfW = (right - left) / DIVISOR_SCALE
+            val halfH = (bottom - top) / DIVISOR_SCALE
 
+            val newHalfW = halfH
+            val newHalfH = halfW
+
+            left = cx - newHalfW
+            right = cx + newHalfW
+            top = cy - newHalfH
+            bottom = cy + newHalfH
+        }
+        val cx = (left + right) / DIVISOR_SCALE
+        val cy = (top + bottom) / DIVISOR_SCALE
+        val halfW = (right - left) / DIVISOR_SCALE
+        val halfH = (bottom - top) / DIVISOR_SCALE
+        val newHalfW = halfW * WIDTH_FACTOR
+        val newHalfH = halfH * HEIGHT_FACTOR
+        left = cx - newHalfW
+        right = cx + newHalfW
+        top = cy - newHalfH
+        bottom = cy + newHalfH
+        val l = left.coerceIn(MIN_VALUE_CORCE, viewWidth)
+        val t = top.coerceIn(MIN_VALUE_CORCE, viewHeight)
+        val r = right.coerceIn(MIN_VALUE_CORCE, viewWidth)
+        val b = bottom.coerceIn(MIN_VALUE_CORCE, viewHeight)
         return android.graphics.Rect(
-            left.toInt(),
-            top.toInt(),
-            right.toInt(),
-            bottom.toInt(),
+            l.toInt(),
+            t.toInt(),
+            r.toInt(),
+            b.toInt(),
         )
     }
 
