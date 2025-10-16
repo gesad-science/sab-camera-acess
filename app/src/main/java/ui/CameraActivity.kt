@@ -2,12 +2,16 @@ package ui
 
 import android.media.Image
 import android.os.Bundle
+import android.util.Size
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
@@ -25,6 +29,8 @@ const val ROTATION_DEGREES_MAX = 270
 const val WIDTH_FACTOR = 1f
 const val HEIGHT_FACTOR = 1.3f
 const val DIVISOR_SCALE = 2f
+const val WIDTH_RESOLUTION = 1280
+const val HEIGHT_RESOLUTION = 720
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var previewView: PreviewView
@@ -47,60 +53,87 @@ class CameraActivity : AppCompatActivity() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
+            val resolutionSelector = buildResolutionSelector()
+            val preview = buildPreview(resolutionSelector)
+            val imageAnalyzer = buildImageAnalyzer(resolutionSelector)
 
-            val preview =
-                Preview
-                    .Builder()
-                    .build()
-                    .also {
-                        it.surfaceProvider = previewView.surfaceProvider
-                    }
-
-            val imageAnalyzer =
-                ImageAnalysis
-                    .Builder()
-                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                    .build()
-                    .also {
-                        it.setAnalyzer(cameraExecutor) { imageProxy ->
-                            val mediaImage = imageProxy.image
-                            if (mediaImage != null) {
-                                val inputImage =
-                                    InputImage
-                                        .fromMediaImage(
-                                            mediaImage,
-                                            imageProxy.imageInfo.rotationDegrees,
-                                        )
-
-                                faceDetectorManager.detectFaces(this, inputImage) { faces ->
-                                    if (faces.isNotEmpty()) {
-                                        instanceFaceDetect(mediaImage, faces, imageProxy.imageInfo.rotationDegrees)
-                                    }
-                                    imageProxy.close()
-                                }
-                            } else {
-                                runOnUiThread {
-                                    faceOverlayView.setFaces(emptyList())
-                                }
-                                imageProxy.close()
-                            }
-                        }
-                    }
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
-                    this,
-                    cameraSelector,
-                    preview,
-                    imageAnalyzer,
-                )
-            } catch (exc: IllegalArgumentException) {
-                exc.printStackTrace()
-            } catch (exc: IllegalStateException) {
-                exc.printStackTrace()
-            }
+            bindCamera(cameraProvider, preview, imageAnalyzer)
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun buildResolutionSelector(): ResolutionSelector =
+        ResolutionSelector
+            .Builder()
+            .setResolutionStrategy(
+                ResolutionStrategy(
+                    Size(WIDTH_RESOLUTION, HEIGHT_RESOLUTION),
+                    ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER,
+                ),
+            ).setAspectRatioStrategy(
+                AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY,
+            ).build()
+
+    private fun buildPreview(resolutionSelector: ResolutionSelector): Preview =
+        Preview
+            .Builder()
+            .setResolutionSelector(resolutionSelector)
+            .build()
+            .also {
+                it.surfaceProvider = previewView.surfaceProvider
+            }
+
+    @OptIn(ExperimentalGetImage::class)
+    private fun buildImageAnalyzer(resolutionSelector: ResolutionSelector): ImageAnalysis =
+        ImageAnalysis
+            .Builder()
+            .setResolutionSelector(resolutionSelector)
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+            .also {
+                it.setAnalyzer(cameraExecutor) { imageProxy ->
+                    processImageProxy(imageProxy)
+                }
+            }
+
+    @OptIn(ExperimentalGetImage::class)
+    private fun processImageProxy(imageProxy: androidx.camera.core.ImageProxy) {
+        val mediaImage = imageProxy.image
+        if (mediaImage != null) {
+            val inputImage =
+                InputImage
+                    .fromMediaImage(
+                        mediaImage,
+                        imageProxy.imageInfo.rotationDegrees,
+                    )
+
+            faceDetectorManager.detectFaces(this, inputImage) { faces ->
+                if (faces.isNotEmpty()) {
+                    instanceFaceDetect(mediaImage, faces, imageProxy.imageInfo.rotationDegrees)
+                }
+                imageProxy.close()
+            }
+        } else {
+            runOnUiThread {
+                faceOverlayView.setFaces(emptyList())
+            }
+            imageProxy.close()
+        }
+    }
+
+    private fun bindCamera(
+        cameraProvider: ProcessCameraProvider,
+        preview: Preview,
+        imageAnalyzer: ImageAnalysis,
+    ) {
+        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+        try {
+            cameraProvider.unbindAll()
+            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer)
+        } catch (exc: IllegalArgumentException) {
+            LogHelper.log(this, "Camera binding failed: ${exc.message}")
+        } catch (exc: IllegalStateException) {
+            LogHelper.log(this, "Camera state error: ${exc.message}")
+        }
     }
 
     fun instanceFaceDetect(
