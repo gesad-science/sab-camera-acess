@@ -1,34 +1,43 @@
 package face
 
-import android.graphics.Bitmap
-import android.util.Log
+import android.content.Context
 import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import files.LogHelper
 
 class FaceDetectorManager {
     private val options =
         FaceDetectorOptions
             .Builder()
-            .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_FAST)
+            .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
+            .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
+            .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
             .build()
 
     private val detector = FaceDetection.getClient(options)
 
-    fun detectFaces(bitmap: Bitmap) {
-        val image = InputImage.fromBitmap(bitmap, 0)
-
+    fun detectFaces(
+        context: Context,
+        input: InputImage,
+        onResult: (List<Face>) -> Unit,
+    ) {
         detector
-            .process(image)
+            .process(input)
             .addOnSuccessListener { faces ->
                 if (faces.isNotEmpty()) {
-                    val face = faces[0]
-                    face.boundingBox
+                    onResult(faces)
                 } else {
-                    Log.w("FaceDetectorManager", "No face detected")
+                    LogHelper.log(context, "No face detected")
+                    onResult(emptyList())
                 }
             }.addOnFailureListener { e ->
-                e.printStackTrace()
+                LogHelper.log(context, "Detection error: ${e.message ?: "Unknown error"}")
+                e.stackTrace.forEach {
+                    LogHelper.log(context, it.toString())
+                }
+                onResult(emptyList())
             }
     }
 }
