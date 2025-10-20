@@ -1,8 +1,10 @@
 package ui
 
+import android.content.pm.PackageManager
 import android.media.Image
 import android.os.Bundle
 import android.util.Size
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
@@ -38,6 +40,16 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var faceOverlayView: FaceOverlayView
 
+    private val requestCameraPermission =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                startCamera()
+            } else {
+                LogHelper.log(this, "Camera permission denied")
+                finish()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
@@ -45,7 +57,13 @@ class CameraActivity : AppCompatActivity() {
         faceDetectorManager = FaceDetectorManager()
         faceOverlayView = findViewById(R.id.faceOverlay)
         cameraExecutor = Executors.newSingleThreadExecutor()
-        startCamera()
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            startCamera()
+        } else {
+            requestCameraPermission.launch(android.Manifest.permission.CAMERA)
+        }
     }
 
     @OptIn(ExperimentalGetImage::class)
@@ -133,6 +151,9 @@ class CameraActivity : AppCompatActivity() {
             LogHelper.log(this, "Camera binding failed: ${exc.message}")
         } catch (exc: IllegalStateException) {
             LogHelper.log(this, "Camera state error: ${exc.message}")
+        } catch (exc: SecurityException) {
+            LogHelper.log(this, "Camera permission lost or denied: ${exc.message}")
+            finish()
         }
     }
 

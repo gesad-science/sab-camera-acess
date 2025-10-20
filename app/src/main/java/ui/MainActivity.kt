@@ -20,16 +20,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     // private var imageCapture: ImageCapture? = null
 
-    private val requestPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                val intent = Intent(this, CameraActivity::class.java)
-                startActivity(intent)
-            } else {
-                LogHelper.log(this, "Permission denied")
-            }
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -42,7 +32,8 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         findViewById<ImageButton>(R.id.buttonCameraIcon).setOnClickListener {
-            requestPermission.launch(Manifest.permission.CAMERA)
+            val intent = Intent(this, CameraActivity::class.java)
+            startActivity(intent)
         }
     }
 
