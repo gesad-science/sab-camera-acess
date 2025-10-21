@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         findViewById<ImageButton>(R.id.buttonCameraIcon).setOnClickListener {
             val intent = Intent(this, CameraActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(intent)
         }
     }

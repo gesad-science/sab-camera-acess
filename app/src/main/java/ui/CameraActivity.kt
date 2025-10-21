@@ -40,16 +40,6 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var faceOverlayView: FaceOverlayView
 
-    private val requestCameraPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                startCamera()
-            } else {
-                LogHelper.log(this, "Camera permission denied")
-                finish()
-            }
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
@@ -57,12 +47,25 @@ class CameraActivity : AppCompatActivity() {
         faceDetectorManager = FaceDetectorManager()
         faceOverlayView = findViewById(R.id.faceOverlay)
         cameraExecutor = Executors.newSingleThreadExecutor()
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+
+        val permission = android.Manifest.permission.CAMERA
+        if (ContextCompat.checkSelfPermission(this, permission)
             == PackageManager.PERMISSION_GRANTED
         ) {
             startCamera()
         } else {
-            requestCameraPermission.launch(android.Manifest.permission.CAMERA)
+            val launcher =
+                registerForActivityResult(
+                    ActivityResultContracts.RequestPermission(),
+                ) { granted ->
+                    if (granted) {
+                        startCamera()
+                    } else {
+                        LogHelper.log(this, "Camera permission denied")
+                        finish()
+                    }
+                }
+            launcher.launch(permission)
         }
     }
 
