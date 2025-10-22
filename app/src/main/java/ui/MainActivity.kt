@@ -1,15 +1,12 @@
 package ui
 
-import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
-import files.LogHelper
 import photos.PhotoManager
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -19,16 +16,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var faceDetectorManager: FaceDetectorManager
     private lateinit var cameraExecutor: ExecutorService
     // private var imageCapture: ImageCapture? = null
-
-    private val requestPermission =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                val intent = Intent(this, CameraActivity::class.java)
-                startActivity(intent)
-            } else {
-                LogHelper.log(this, "Permission denied")
-            }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +29,9 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         findViewById<ImageButton>(R.id.buttonCameraIcon).setOnClickListener {
-            requestPermission.launch(Manifest.permission.CAMERA)
+            val intent = Intent(this, CameraActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            startActivity(intent)
         }
     }
 
