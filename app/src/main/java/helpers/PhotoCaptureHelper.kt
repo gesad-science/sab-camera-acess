@@ -1,6 +1,7 @@
 package helpers
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -59,40 +60,23 @@ class PhotoCaptureHelper(
                     super.onCaptureSuccess(imageProxy)
                     try {
                         val rotation = imageProxy.imageInfo.rotationDegrees
-                        val bitmap = imageProxy.toBitmap()?.copy(android.graphics.Bitmap.Config.ARGB_8888, true)
+                        val bitmap = imageProxy.toBitmap()?.copy(Bitmap.Config.ARGB_8888, true)
                         if (bitmap == null) {
                             onError("Failed to convert ImageProxy to Bitmap")
                             imageProxy.close()
                             return
                         }
 
-                        val inputImage = InputImage.fromBitmap(bitmap, rotation)
-                        faceDetectorManager.detectFaces(context, inputImage) { faces ->
-                            if (faces.isNotEmpty()) {
-                                val canvas = Canvas(bitmap)
-                                faces.forEach { face ->
-                                    val rect =
-                                        mapFaceRectToBitmap(
-                                            face.boundingBox,
-                                            bitmap.width,
-                                            bitmap.height,
-                                        )
-                                    canvas.drawRect(rect, rectPaint)
-                                    canvas.drawText(
-                                        "Face",
-                                        rect.left.toFloat(),
-                                        (rect.top - DRAWN_TEXT_TOP).coerceAtLeast(MINIMUM_VALUE_DRAWN).toFloat(),
-                                        textPaint,
-                                    )
+                        cropFace(bitmap, rotation) { faceBitmap ->
+                            faceBitmap?.let { fb ->
+                                FileOutputStream(photoFile).use { out ->
+                                    if (fb.compress(Bitmap.CompressFormat.JPEG, QUALITY_IMAGE, out)) {
+                                        onPhotoSaved(photoFile.absolutePath)
+                                    } else {
+                                        onError("Failed to save image")
+                                    }
                                 }
-                            }
-                            FileOutputStream(photoFile).use { out ->
-                                if (bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, QUALITY_IMAGE, out)) {
-                                    onPhotoSaved(photoFile.absolutePath)
-                                } else {
-                                    onError("Failed to save image")
-                                }
-                            }
+                            } ?: onError("No face detected to save")
                             imageProxy.close()
                         }
                     } catch (e: IllegalArgumentException) {
@@ -101,6 +85,46 @@ class PhotoCaptureHelper(
                     } catch (e: IllegalStateException) {
                         onError("Illegal state: ${e.message}")
                         imageProxy.close()
+                    }
+                }
+
+                private fun cropFace(
+                    bitmap: Bitmap,
+                    rotation: Int,
+                    onFaceCropped: (Bitmap?) -> Unit,
+                ) {
+                    val inputImage = InputImage.fromBitmap(bitmap, rotation)
+                    faceDetectorManager.detectFaces(context, inputImage) { faces ->
+                        if (faces.isNotEmpty()) {
+                            val face = faces.first()
+                            val rect = mapFaceRectToBitmap(face.boundingBox, bitmap.width, bitmap.height)
+                            val canvas = Canvas(bitmap)
+                            canvas.drawRect(rect, rectPaint)
+                            canvas.drawText(
+                                "Face",
+                                rect.left.toFloat(),
+                                (rect.top - DRAWN_TEXT_TOP).coerceAtLeast(MINIMUM_VALUE_DRAWN).toFloat(),
+                                textPaint,
+                            )
+                            val safeRect =
+                                Rect(
+                                    rect.left.coerceIn(0, bitmap.width - 1),
+                                    rect.top.coerceIn(0, bitmap.height - 1),
+                                    rect.right.coerceIn(0, bitmap.width),
+                                    rect.bottom.coerceIn(0, bitmap.height),
+                                )
+                            val faceBitmap =
+                                Bitmap.createBitmap(
+                                    bitmap,
+                                    safeRect.left,
+                                    safeRect.top,
+                                    safeRect.width(),
+                                    safeRect.height(),
+                                )
+                            onFaceCropped(faceBitmap)
+                        } else {
+                            onFaceCropped(null)
+                        }
                     }
                 }
 
