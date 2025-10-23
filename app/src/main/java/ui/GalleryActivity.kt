@@ -1,38 +1,36 @@
 package ui
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sab.cameraacess.R
-import photos.PhotoGallery
-import photos.PhotoManager
+import java.io.File
 
 class GalleryActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var photoGallery: PhotoGallery
-
-    companion object {
-        private const val SPAN_COUNT = 3
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gallery)
 
-        recyclerView = findViewById(R.id.recyclerViewGallery)
-        recyclerView.layoutManager = GridLayoutManager(this, SPAN_COUNT)
+        val imageView = findViewById<ImageView>(R.id.imageViewFull)
 
-        val photoManager = PhotoManager(this)
-        val photos = photoManager.getAllPhotos().toMutableList()
-        photoGallery = PhotoGallery(photos)
-        recyclerView.adapter = photoGallery
-    }
+        val photoPath = intent.getStringExtra("photo_path")
 
-    override fun onResume() {
-        super.onResume()
-        val photoManager = PhotoManager(this)
-        val photos = photoManager.getAllPhotos()
-        photoGallery.updatePhotos(photos)
+        if (photoPath != null) {
+            val photoFile = File(photoPath)
+            if (photoFile.exists()) {
+                val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+                imageView.setImageBitmap(bitmap)
+            }
+        } else {
+            val photosDir = getExternalFilesDir("photos") ?: filesDir
+            val allPhotos = photosDir.listFiles()?.sortedByDescending { it.lastModified() }
+
+            if (!allPhotos.isNullOrEmpty()) {
+                val lastPhoto = allPhotos.first()
+                val bitmap = BitmapFactory.decodeFile(lastPhoto.absolutePath)
+                imageView.setImageBitmap(bitmap)
+            }
+        }
     }
 }
