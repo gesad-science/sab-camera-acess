@@ -22,7 +22,6 @@
             android:id="@+id/btnTakePhoto"
             android:layout_width="70dp"
             android:layout_height="80dp"
-            android:text="@string/camera_icon"
             android:backgroundTint="@color/white"
             android:textColor="@android:color/white"
             android:elevation="4dp"
