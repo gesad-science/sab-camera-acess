@@ -1,255 +1,116 @@
 package ui
 
+import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.Image
 import android.os.Bundle
-import android.util.Size
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ExperimentalGetImage
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.Preview
-import androidx.camera.core.resolutionselector.AspectRatioStrategy
-import androidx.camera.core.resolutionselector.ResolutionSelector
-import androidx.camera.core.resolutionselector.ResolutionStrategy
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.Face
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
 import files.LogHelper
+import helpers.CameraManager
+import helpers.ImageAnalysisHelper
+import helpers.PhotoCaptureHelper
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-
-const val MIN_VALUE_CORCE = 0f
-const val ROTATION_DEGREES_MIN = 90
-const val ROTATION_DEGREES_MAX = 270
-const val WIDTH_FACTOR = 1f
-const val HEIGHT_FACTOR = 1.3f
-const val DIVISOR_SCALE = 2f
-const val WIDTH_RESOLUTION = 1280
-const val HEIGHT_RESOLUTION = 720
 
 class CameraActivity : AppCompatActivity() {
     private lateinit var previewView: PreviewView
     private lateinit var faceDetectorManager: FaceDetectorManager
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var faceOverlayView: FaceOverlayView
+    private lateinit var permissionLauncher: androidx.activity.result.ActivityResultLauncher<String>
+
+    private lateinit var cameraManager: CameraManager
+    private lateinit var imageAnalysisHelper: ImageAnalysisHelper
+    private lateinit var photoCaptureHelper: PhotoCaptureHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
+
+        initViews()
+        initDependencies()
+        setupPermissions()
+        setupClickListeners()
+    }
+
+    private fun initViews() {
         previewView = findViewById(R.id.previewView)
-        faceDetectorManager = FaceDetectorManager()
         faceOverlayView = findViewById(R.id.faceOverlay)
+    }
+
+    private fun initDependencies() {
+        faceDetectorManager = FaceDetectorManager()
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        imageAnalysisHelper = ImageAnalysisHelper(faceDetectorManager, faceOverlayView, previewView)
+        photoCaptureHelper = PhotoCaptureHelper(this, faceDetectorManager)
+        cameraManager = CameraManager(this, this, previewView, cameraExecutor)
+    }
+
+    private fun setupPermissions() {
+        permissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission(),
+            ) { granted ->
+                if (granted) {
+                    startCamera()
+                } else {
+                    LogHelper.log(this, "Camera permission denied")
+                    finish()
+                }
+            }
+
         val permission = android.Manifest.permission.CAMERA
-        if (ContextCompat.checkSelfPermission(this, permission)
-            == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
             startCamera()
         } else {
-            val launcher =
-                registerForActivityResult(
-                    ActivityResultContracts.RequestPermission(),
-                ) { granted ->
-                    if (granted) {
-                        startCamera()
-                    } else {
-                        LogHelper.log(this, "Camera permission denied")
-                        finish()
-                    }
-                }
-            launcher.launch(permission)
+            permissionLauncher.launch(permission)
         }
     }
 
-    @OptIn(ExperimentalGetImage::class)
+    private fun setupClickListeners() {
+        findViewById<android.widget.Button>(R.id.btnTakePhoto).setOnClickListener {
+            takePhoto()
+        }
+    }
+
     private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
-        cameraProviderFuture.addListener({
-            val cameraProvider = cameraProviderFuture.get()
-            val resolutionSelector = buildResolutionSelector()
-            val preview = buildPreview(resolutionSelector)
-            val imageAnalyzer = buildImageAnalyzer(resolutionSelector)
-
-            bindCamera(cameraProvider, preview, imageAnalyzer)
-        }, ContextCompat.getMainExecutor(this))
+        val analyzer = imageAnalysisHelper.createAnalyzer(this)
+        cameraManager.startCamera(analyzer)
     }
 
-    private fun buildResolutionSelector(): ResolutionSelector =
-        ResolutionSelector
-            .Builder()
-            .setResolutionStrategy(
-                ResolutionStrategy(
-                    Size(WIDTH_RESOLUTION, HEIGHT_RESOLUTION),
-                    ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER,
-                ),
-            ).setAspectRatioStrategy(
-                AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY,
-            ).build()
-
-    private fun buildPreview(resolutionSelector: ResolutionSelector): Preview =
-        Preview
-            .Builder()
-            .setResolutionSelector(resolutionSelector)
-            .build()
-            .also {
-                it.surfaceProvider = previewView.surfaceProvider
-            }
-
-    @OptIn(ExperimentalGetImage::class)
-    private fun buildImageAnalyzer(resolutionSelector: ResolutionSelector): ImageAnalysis =
-        ImageAnalysis
-            .Builder()
-            .setResolutionSelector(resolutionSelector)
-            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-            .build()
-            .also {
-                it.setAnalyzer(cameraExecutor) { imageProxy ->
-                    processImageProxy(imageProxy)
-                }
-            }
-
-    @OptIn(ExperimentalGetImage::class)
-    private fun processImageProxy(imageProxy: androidx.camera.core.ImageProxy) {
-        val mediaImage = imageProxy.image
-        if (mediaImage != null) {
-            val inputImage =
-                InputImage
-                    .fromMediaImage(
-                        mediaImage,
-                        imageProxy.imageInfo.rotationDegrees,
-                    )
-
-            faceDetectorManager.detectFaces(this, inputImage) { faces ->
-                if (faces.isNotEmpty()) {
-                    instanceFaceDetect(mediaImage, faces, imageProxy.imageInfo.rotationDegrees)
-                }
-                imageProxy.close()
-            }
-        } else {
-            runOnUiThread {
-                faceOverlayView.setFaces(emptyList())
-            }
-            imageProxy.close()
-        }
-    }
-
-    private fun bindCamera(
-        cameraProvider: ProcessCameraProvider,
-        preview: Preview,
-        imageAnalyzer: ImageAnalysis,
-    ) {
-        val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-        try {
-            cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalyzer)
-        } catch (exc: IllegalArgumentException) {
-            LogHelper.log(this, "Camera binding failed: ${exc.message}")
-        } catch (exc: IllegalStateException) {
-            LogHelper.log(this, "Camera state error: ${exc.message}")
-        } catch (exc: SecurityException) {
-            LogHelper.log(this, "Camera permission lost or denied: ${exc.message}")
-            finish()
-        }
-    }
-
-    fun instanceFaceDetect(
-        mediaImage: Image,
-        faces: List<Face>,
-        rotationDegrees: Int,
-    ) {
-        val imageWidth = mediaImage.width
-        val imageHeight = mediaImage.height
-        val rects =
-            faces.map { face ->
-                mapRectToView(face.boundingBox, imageWidth, imageHeight, rotationDegrees, false)
-            }
-
-        runOnUiThread {
-            faceOverlayView.setFaces(rects)
-        }
-
-        for (face in faces) {
-            LogHelper.log(this, "Face detected: ${face.boundingBox}")
-        }
-    }
-
-    private fun mapRectToView(
-        rect: android.graphics.Rect,
-        imageWidth: Int,
-        imageHeight: Int,
-        rotationDegrees: Int,
-        isFrontCamera: Boolean,
-    ): android.graphics.Rect {
-        val viewWidth = previewView.width.toFloat()
-        val viewHeight = previewView.height.toFloat()
-
-        val scaleX: Float
-        val scaleY: Float
-        if (rotationDegrees == ROTATION_DEGREES_MIN || rotationDegrees == ROTATION_DEGREES_MAX) {
-            scaleX = viewWidth / imageHeight
-            scaleY = viewHeight / imageWidth
-        } else {
-            scaleX = viewWidth / imageWidth
-            scaleY = viewHeight / imageHeight
-        }
-
-        var left = rect.left * scaleX
-        var top = rect.top * scaleY
-        var right = rect.right * scaleX
-        var bottom = rect.bottom * scaleY
-
-        if (isFrontCamera) {
-            val flippedLeft = viewWidth - right
-            val flippedRight = viewWidth - left
-            left = flippedLeft
-            right = flippedRight
-        }
-        if (rotationDegrees != ROTATION_DEGREES_MIN && rotationDegrees != ROTATION_DEGREES_MAX) {
-            val cx = (left + right) / DIVISOR_SCALE
-            val cy = (top + bottom) / DIVISOR_SCALE
-            val halfW = (right - left) / DIVISOR_SCALE
-            val halfH = (bottom - top) / DIVISOR_SCALE
-
-            val newHalfW = halfH
-            val newHalfH = halfW
-
-            left = cx - newHalfW
-            right = cx + newHalfW
-            top = cy - newHalfH
-            bottom = cy + newHalfH
-        }
-        val cx = (left + right) / DIVISOR_SCALE
-        val cy = (top + bottom) / DIVISOR_SCALE
-        val halfW = (right - left) / DIVISOR_SCALE
-        val halfH = (bottom - top) / DIVISOR_SCALE
-        val newHalfW = halfW * WIDTH_FACTOR
-        val newHalfH = halfH * HEIGHT_FACTOR
-        left = cx - newHalfW
-        right = cx + newHalfW
-        top = cy - newHalfH
-        bottom = cy + newHalfH
-        val l = left.coerceIn(MIN_VALUE_CORCE, viewWidth)
-        val t = top.coerceIn(MIN_VALUE_CORCE, viewHeight)
-        val r = right.coerceIn(MIN_VALUE_CORCE, viewWidth)
-        val b = bottom.coerceIn(MIN_VALUE_CORCE, viewHeight)
-        return android.graphics.Rect(
-            l.toInt(),
-            t.toInt(),
-            r.toInt(),
-            b.toInt(),
+    private fun takePhoto() {
+        photoCaptureHelper.takePhoto(
+            cameraManager.imageCapture,
+            cameraExecutor,
+            onPhotoSaved = { photoPath ->
+                LogHelper.log(this, "Image saved: $photoPath")
+                val intent = Intent(this, GalleryActivity::class.java)
+                intent.putExtra("photo_path", photoPath)
+                startActivity(intent)
+            },
+            onError = { error ->
+                LogHelper.log(this, error)
+            },
         )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!::cameraExecutor.isInitialized || cameraExecutor.isShutdown) {
+            cameraExecutor = Executors.newSingleThreadExecutor()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        cameraExecutor.shutdown()
+        if (::cameraExecutor.isInitialized && !cameraExecutor.isShutdown) {
+            cameraExecutor.shutdown()
+        }
+        cameraManager.shutdown()
     }
 }

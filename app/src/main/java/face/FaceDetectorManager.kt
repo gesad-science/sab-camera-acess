@@ -27,6 +27,7 @@ class FaceDetectorManager {
             .process(input)
             .addOnSuccessListener { faces ->
                 if (faces.isNotEmpty()) {
+                    LogHelper.log(context, "Face detected")
                     onResult(faces)
                 } else {
                     LogHelper.log(context, "No face detected")
