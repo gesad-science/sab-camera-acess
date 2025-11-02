@@ -42,6 +42,7 @@ dependencies {
     implementation("com.google.mlkit:face-detection:16.1.6")
     implementation(libs.androidx.foundation)
     implementation(libs.material3)
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.google.firebase:firebase-firestore-ktx:24.5.0")
     val cameraXVersion = "1.5.0"
     implementation("androidx.camera:camera-core:$cameraXVersion")

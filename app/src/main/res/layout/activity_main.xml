@@ -50,6 +50,21 @@
         app:layout_constraintTop_toBottomOf="@id/textViewSubtitle"
         app:tint="@android:color/white" />
 
+    <ImageView
+        android:id="@+id/buttonConfiguration"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:src="@drawable/settings"
+        android:contentDescription="@string/button_of_camera_configuration"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp" />
+
+
+
     <TextView
         android:id="@+id/textViewHint"
         android:layout_width="wrap_content"
