@@ -1,6 +1,5 @@
 package ui
 
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,6 +10,7 @@ import com.sab.cameraacess.R
 import face.FaceDetectorManager
 import files.LogHelper
 import helpers.CameraManager
+import helpers.FaceApiHelper
 import helpers.ImageAnalysisHelper
 import helpers.PhotoCaptureHelper
 import java.util.concurrent.ExecutorService
@@ -26,11 +26,14 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var cameraManager: CameraManager
     private lateinit var imageAnalysisHelper: ImageAnalysisHelper
     private lateinit var photoCaptureHelper: PhotoCaptureHelper
+    private lateinit var apiUrl: String
+    private lateinit var modelName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
-
+        apiUrl = intent.getStringExtra("api_url") ?: ""
+        modelName = intent.getStringExtra("model_name") ?: ""
         initViews()
         initDependencies()
         setupPermissions()
@@ -87,11 +90,13 @@ class CameraActivity : AppCompatActivity() {
         photoCaptureHelper.takePhoto(
             cameraManager.imageCapture,
             cameraExecutor,
-            onPhotoSaved = { photoPath ->
-                LogHelper.log(this, "Image saved: $photoPath")
-                val intent = Intent(this, GalleryActivity::class.java)
-                intent.putExtra("photo_path", photoPath)
-                startActivity(intent)
+            onFacesCropped = { faceBitmaps ->
+                if (faceBitmaps.isEmpty()) {
+                    LogHelper.log(this, "No faces detected")
+                    return@takePhoto
+                }
+                val finalUrl = "$apiUrl/v1/$modelName"
+                FaceApiHelper.sendFacesToApi(this, faceBitmaps, finalUrl)
             },
             onError = { error ->
                 LogHelper.log(this, error)

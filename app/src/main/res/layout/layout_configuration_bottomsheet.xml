@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+        <EditText
+            android:id="@+id/inputApiUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="name"
+            android:hint="@string/url_da_api"
+            android:inputType="textUri" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="4dp">
+
+                <RadioButton
+                    android:id="@+id/radioResNet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/resnet" />
+
+                <RadioButton
+                    android:id="@+id/radioMobileNet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mobilenet"
+                    android:layout_marginStart="16dp"/>
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/buttonSaveConfig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/salvar"
+            android:layout_marginTop="12dp" />
+</LinearLayout>

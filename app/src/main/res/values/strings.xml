@@ -7,5 +7,11 @@
     <string name="use_the_camera_to_test_the_facial_recognition_system">Use the camera to test the Facial Recognition System</string>
     <string name="tap_the_icon_to_open_the_camera">Tap the icon to open the Camera</string>
     <string name="photo">Photo</string>
+    <string name="button_of_camera_configuration">Button of camera configuration</string>
+    <string name="url_da_api">API URL</string>
+    <string name="chave_da_api">API KEY</string>
+    <string name="salvar">Salvar</string>
+    <string name="resnet">ResNet</string>
+    <string name="mobilenet">MobileNet</string>
 
 </resources>

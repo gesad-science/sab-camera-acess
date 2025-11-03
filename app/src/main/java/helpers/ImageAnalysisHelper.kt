@@ -2,6 +2,7 @@ package helpers
 
 import android.graphics.Rect
 import android.media.Image
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -33,6 +34,10 @@ class ImageAnalysisHelper(
                         instanceFaceDetect(mediaImage, faces, imageProxy.imageInfo.rotationDegrees)
                     }
                     imageProxy.close()
+                    Log.d("FaceDebug", "Detected faces: ${faces.size}")
+                    faces.forEach { face ->
+                        Log.d("FaceDebug", "Rect: ${face.boundingBox}")
+                    }
                 }
             } else {
                 activity.runOnUiThread {
