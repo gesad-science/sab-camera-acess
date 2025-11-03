@@ -14,7 +14,7 @@ class ApiConfigManager {
 
     fun getFinalUrl(): String {
         check(apiUrl.isNotEmpty() && modelName.isNotEmpty()) {
-            "API URL ou model não configurados"
+            "API URL or model not configured"
         }
         return "$apiUrl/v1/$modelName"
     }
