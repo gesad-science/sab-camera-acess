@@ -9,7 +9,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints="name"
-            android:hint="@string/url_da_api"
+            android:hint="@string/url_of_api"
             android:inputType="textUri" />
 
         <RadioGroup
@@ -37,6 +37,6 @@
             android:id="@+id/buttonSaveConfig"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/salvar"
+            android:text="@string/save"
             android:layout_marginTop="12dp" />
 </LinearLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CameraAcess</string>
+    <string name="app_name">Recognition Camera</string>
     <string name="open_camera">Open Camera</string>
     <string name="detection_system">DETECTION SYSTEM</string>
     <string name="open_gallery">Open Gallery</string>
@@ -8,9 +8,9 @@
     <string name="tap_the_icon_to_open_the_camera">Tap the icon to open the Camera</string>
     <string name="photo">Photo</string>
     <string name="button_of_camera_configuration">Button of camera configuration</string>
-    <string name="url_da_api">API URL</string>
-    <string name="chave_da_api">API KEY</string>
-    <string name="salvar">Salvar</string>
+    <string name="url_of_api">API URL</string>
+    <string name="key_of_api">API KEY</string>
+    <string name="save">Save</string>
     <string name="resnet">ResNet</string>
     <string name="mobilenet">MobileNet</string>
 
