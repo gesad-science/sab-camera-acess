@@ -1,15 +1,12 @@
 package helpers
 
 class ApiConfigManager {
-    var apiUrl: String = ""
-    var modelName: String = ""
+    var apiUrl: String = "https://2022f5a5ac59.ngrok-free.app"
+    var modelName: String = "ResNet"
 
-    fun setConfig(
-        url: String,
-        model: String,
-    ) {
-        apiUrl = url.trimEnd('/')
-        modelName = model
+    fun setConfig() {
+        apiUrl = "https://2022f5a5ac59.ngrok-free.app"
+        modelName = "ResNet"
     }
 
     fun getFinalUrl(): String {

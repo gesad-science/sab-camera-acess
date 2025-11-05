@@ -1,7 +1,9 @@
 package files
 
+import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -16,28 +18,19 @@ object LogHelper {
     private const val LOG_TAG = "FaceApp"
     private const val FILE_NAME = "app_log.txt"
 
-    fun log(
-        context: Context,
-        message: String,
-    ) {
+    fun log(context: Context, message: String) {
         Log.d(LOG_TAG, message)
-        saveLog(
-            context,
-            message,
-        )
+        saveLog(context, message)
     }
 
-    private fun saveLog(
-        context: Context,
-        message: String,
-    ) {
+    private fun saveLog(context: Context, message: String) {
         try {
             getOutputStream(context)?.use { stream ->
                 writeLog(stream, message)
             }
-            Log.d(LOG_TAG, "Log saved in $FILE_NAME")
+            Log.d(LOG_TAG, "Log salvo com sucesso.")
         } catch (e: IOException) {
-            Log.e(LOG_TAG, "Error in save log: ${e.message}")
+            Log.e(LOG_TAG, "Erro ao salvar log: ${e.message}")
         }
     }
 
@@ -48,38 +41,38 @@ object LogHelper {
             getLegacyOutputStream(context)
         }
 
-    @RequiresApi(
-        Build.VERSION_CODES.Q,
-    )
+    /**
+     * Usa MediaStore para salvar SEM recriar o arquivo.
+     * Se o arquivo já existir, reabre para append ("wa").
+     */
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun getScopedOutputStream(context: Context): OutputStream? {
         val resolver = context.contentResolver
-        val existingFile =
-            resolver.query(
-                MediaStore.Downloads.EXTERNAL_CONTENT_URI,
-                arrayOf(MediaStore.Downloads._ID),
-                "${MediaStore.Downloads.DISPLAY_NAME}=?",
-                arrayOf(FILE_NAME),
-                null,
-            )
+        var uri: Uri? = null
 
-        val uri =
-            if (existingFile != null && existingFile.moveToFirst()) {
-                val id = existingFile.getLong(existingFile.getColumnIndexOrThrow(MediaStore.Downloads._ID))
-                existingFile.close()
-                MediaStore.Downloads.EXTERNAL_CONTENT_URI
-                    .buildUpon()
-                    .appendPath(id.toString())
-                    .build()
-            } else {
-                existingFile?.close()
-                val contentValues =
-                    ContentValues().apply {
-                        put(MediaStore.Downloads.DISPLAY_NAME, FILE_NAME)
-                        put(MediaStore.Downloads.MIME_TYPE, "text/plain")
-                        put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
-                    }
-                resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+        // 1. Tenta achar o arquivo existente
+        resolver.query(
+            MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+            arrayOf(MediaStore.Downloads._ID),
+            "${MediaStore.Downloads.DISPLAY_NAME}=?",
+            arrayOf(FILE_NAME),
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val id = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Downloads._ID))
+                uri = ContentUris.withAppendedId(MediaStore.Downloads.EXTERNAL_CONTENT_URI, id)
             }
+        }
+
+        // 2. Se não encontrou, cria novo
+        if (uri == null) {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Downloads.DISPLAY_NAME, FILE_NAME)
+                put(MediaStore.Downloads.MIME_TYPE, "text/plain")
+                put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
+            }
+            uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+        }
 
         return uri?.let { resolver.openOutputStream(it, "wa") }
     }
@@ -91,11 +84,10 @@ object LogHelper {
         return FileOutputStream(file, true)
     }
 
-    private fun writeLog(
-        stream: OutputStream,
-        message: String,
-    ) = stream.use {
-        it.write("${System.currentTimeMillis()} - $message\n".toByteArray())
-        it.flush()
+    private fun writeLog(stream: OutputStream, message: String) {
+        stream.use {
+            it.write("${System.currentTimeMillis()} - $message\n".toByteArray())
+            it.flush()
+        }
     }
 }

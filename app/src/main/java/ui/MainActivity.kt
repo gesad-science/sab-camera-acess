@@ -55,13 +55,7 @@ class MainActivity : AppCompatActivity() {
                     showSnackbar("Fill in all the fields")
                     return@setOnClickListener
                 }
-                val model =
-                    when (selectedRadioId) {
-                        R.id.radioResNet -> "ResNet"
-                        R.id.radioMobileNet -> "MobileNet"
-                        else -> ""
-                    }
-                apiConfigManager.setConfig(url, model)
+                apiConfigManager.setConfig()
                 showSnackbar("Configuration Saved")
                 dialog.dismiss()
             }
