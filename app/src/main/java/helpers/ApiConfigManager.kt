@@ -1,18 +1,28 @@
 package helpers
 
-class ApiConfigManager {
-    var apiUrl: String = "https://2022f5a5ac59.ngrok-free.app"
-    var modelName: String = "ResNet"
+import android.content.Context
 
-    fun setConfig() {
-        apiUrl = "https://2022f5a5ac59.ngrok-free.app"
-        modelName = "ResNet"
-    }
+class ApiConfigManager(
+    private val context: Context,
+) {
+    private val prefs =
+        context.getSharedPreferences(
+            "api_config",
+            Context.MODE_PRIVATE,
+        )
 
-    fun getFinalUrl(): String {
-        check(apiUrl.isNotEmpty() && modelName.isNotEmpty()) {
-            "API URL or model not configured"
+    fun setConfig(
+        url: String,
+        model: String,
+    ) {
+        prefs.edit().apply {
+            putString("api_url", url)
+            putString("model_name", model)
+            apply()
         }
-        return "$apiUrl/v1/$modelName"
     }
+
+    fun getFinalUrl(): String = prefs.getString("api_url", "") ?: ""
+
+    fun getModelName(): String = prefs.getString("model_name", "") ?: ""
 }

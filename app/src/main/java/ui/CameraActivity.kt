@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
 import files.LogHelper
-import helpers.ApiConfigManager
 import helpers.CameraManager
 import helpers.FaceApiHelper
 import helpers.ImageAnalysisHelper
@@ -27,10 +26,14 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var cameraManager: CameraManager
     private lateinit var imageAnalysisHelper: ImageAnalysisHelper
     private lateinit var photoCaptureHelper: PhotoCaptureHelper
+    private lateinit var apiUrl: String
+    private lateinit var modelName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
+        apiUrl = intent.getStringExtra("api_url") ?: ""
+        modelName = intent.getStringExtra("model_name") ?: ""
         initViews()
         initDependencies()
         setupPermissions()
@@ -92,9 +95,7 @@ class CameraActivity : AppCompatActivity() {
                     LogHelper.log(this, "No faces detected")
                     return@takePhoto
                 }
-                val apiConfig = ApiConfigManager()
-                val finalUrl = apiConfig.getFinalUrl()
-                FaceApiHelper.sendFacesToApi(this, faceBitmaps, finalUrl)
+                FaceApiHelper.sendFacesToApi(this, faceBitmaps, apiUrl)
             },
             onError = { error ->
                 LogHelper.log(this, error)

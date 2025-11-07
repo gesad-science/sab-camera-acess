@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         photoManager = PhotoManager(this)
         faceDetectorManager = FaceDetectorManager()
         cameraExecutor = Executors.newSingleThreadExecutor()
-        apiConfigManager = ApiConfigManager()
+        apiConfigManager = ApiConfigManager(this)
         val message = intent.getStringExtra("snackbar_message")
         message?.let {
             showSnackbar(it)
@@ -55,15 +55,33 @@ class MainActivity : AppCompatActivity() {
                     showSnackbar("Fill in all the fields")
                     return@setOnClickListener
                 }
-                apiConfigManager.setConfig()
+                val model =
+                    when (selectedRadioId) {
+                        R.id.radioResNet -> "ResNet"
+                        R.id.radioMobileNet -> "MobileNet"
+                        else -> ""
+                    }
+                apiConfigManager.setConfig(url, model)
                 showSnackbar("Configuration Saved")
                 dialog.dismiss()
             }
             dialog.show()
         }
         findViewById<ImageButton>(R.id.buttonCameraIcon).setOnClickListener {
-            val intent = Intent(this, CameraActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            val apiUrl = apiConfigManager.getFinalUrl()
+            val modelName = apiConfigManager.getModelName()
+            if (apiUrl.isEmpty() || modelName.isEmpty()) {
+                showSnackbar("Please configure the API URL and model first")
+                return@setOnClickListener
+            }
+            val finalUrl = "$apiUrl/v1/$modelName"
+            val intent =
+                Intent(this, CameraActivity::class.java)
+                    .apply {
+                        putExtra("api_url", finalUrl)
+                        putExtra("model_name", modelName)
+                        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                    }
             startActivity(intent)
         }
     }
