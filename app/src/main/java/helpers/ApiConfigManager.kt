@@ -1,21 +1,28 @@
 package helpers
 
-class ApiConfigManager {
-    var apiUrl: String = ""
-    var modelName: String = ""
+import android.content.Context
+
+class ApiConfigManager(
+    private val context: Context,
+) {
+    private val prefs =
+        context.getSharedPreferences(
+            "api_config",
+            Context.MODE_PRIVATE,
+        )
 
     fun setConfig(
         url: String,
         model: String,
     ) {
-        apiUrl = url.trimEnd('/')
-        modelName = model
+        prefs.edit().apply {
+            putString("api_url", url)
+            putString("model_name", model)
+            apply()
+        }
     }
 
-    fun getFinalUrl(): String {
-        check(apiUrl.isNotEmpty() && modelName.isNotEmpty()) {
-            "API URL or model not configured"
-        }
-        return "$apiUrl/v1/$modelName"
-    }
+    fun getFinalUrl(): String = prefs.getString("api_url", "") ?: ""
+
+    fun getModelName(): String = prefs.getString("model_name", "") ?: ""
 }

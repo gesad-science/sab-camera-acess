@@ -11,7 +11,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
-import org.json.JSONException
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
@@ -33,52 +32,56 @@ object FaceApiHelper {
             LogHelper.log(context, "No faces detected for send.")
             return
         }
-        try {
-            val jsonFaces =
-                faces.map { bitmap ->
-                    val byteArray = bitmap.toByteArray()
-                    Base64.encodeToString(byteArray, Base64.NO_WRAP)
-                }
-            val json = """{"faces":[${jsonFaces.joinToString(",") { "\"$it\"" }}]}"""
-            LogHelper.log(context, "Send JSON: ${json.take(LIMIT_JSON)}...")
-            val client = OkHttpClient()
-            val body = json.toRequestBody("application/json; charset=utf-8".toMediaType())
-            val request =
-                Request
-                    .Builder()
-                    .url(url)
-                    .post(body)
-                    .build()
 
-            client.newCall(request).enqueue(
-                object : Callback {
-                    override fun onFailure(
-                        call: Call,
-                        e: IOException,
-                    ) {
-                        LogHelper.log(context, "Error to connect for API: ${e.localizedMessage}")
-                    }
+        val client = OkHttpClient()
 
-                    override fun onResponse(
-                        call: Call,
-                        response: Response,
-                    ) {
-                        response.use {
-                            if (!response.isSuccessful) {
-                                LogHelper.log(context, "Error of API (${response.code}): ${response.message}")
-                                return
-                            }
-                            LogHelper.log(context, "Faces sent! Code: ${response.code}")
+        faces.forEachIndexed { index, bitmap ->
+            try {
+                val byteArray = bitmap.toByteArray()
+                val base64 = Base64.encodeToString(byteArray, Base64.NO_WRAP)
+                val json = """{"image_base64":"$base64"}"""
+                LogHelper.log(context, "Sending face #$index: ${json.take(LIMIT_JSON)}...")
+                val body = json.toRequestBody("application/json; charset=utf-8".toMediaType())
+                val request =
+                    Request
+                        .Builder()
+                        .url(url)
+                        .post(body)
+                        .build()
+
+                client.newCall(request).enqueue(
+                    object : Callback {
+                        override fun onFailure(
+                            call: Call,
+                            e: IOException,
+                        ) {
+                            LogHelper.log(context, "Error sending face #$index: ${e.localizedMessage}")
                         }
-                    }
-                },
-            )
-        } catch (e: JSONException) {
-            LogHelper.log(context, "Error to make JSON: ${e.localizedMessage}")
-        } catch (e: IllegalArgumentException) {
-            LogHelper.log(context, "Error to encode image: ${e.localizedMessage}")
-        } catch (e: IllegalStateException) {
-            LogHelper.log(context, "State error: ${e.localizedMessage}")
+
+                        override fun onResponse(
+                            call: Call,
+                            response: Response,
+                        ) {
+                            response.use {
+                                if (!response.isSuccessful) {
+                                    LogHelper.log(
+                                        context,
+                                        "Error of API (${response.code}) for face #$index: ${response.message}",
+                                    )
+                                    return
+                                }
+                                LogHelper.log(context, "Face #$index sent successfully! Code: ${response.code}")
+                            }
+                        }
+                    },
+                )
+            } catch (e: IOException) {
+                LogHelper.log(context, "I/O error preparing face #$index: ${e.localizedMessage}")
+            } catch (e: IllegalArgumentException) {
+                LogHelper.log(context, "Encoding error for face #$index: ${e.localizedMessage}")
+            } catch (e: IllegalStateException) {
+                LogHelper.log(context, "State error for face #$index: ${e.localizedMessage}")
+            }
         }
     }
 }

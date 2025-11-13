@@ -95,8 +95,7 @@ class CameraActivity : AppCompatActivity() {
                     LogHelper.log(this, "No faces detected")
                     return@takePhoto
                 }
-                val finalUrl = "$apiUrl/v1/$modelName"
-                FaceApiHelper.sendFacesToApi(this, faceBitmaps, finalUrl)
+                FaceApiHelper.sendFacesToApi(this, faceBitmaps, apiUrl)
             },
             onError = { error ->
                 LogHelper.log(this, error)
