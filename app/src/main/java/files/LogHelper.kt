@@ -29,9 +29,9 @@ object LogHelper {
             getOutputStream(context)?.use { stream ->
                 writeLog(stream, message)
             }
-            Log.d(LOG_TAG, "Log salvo com sucesso.")
+            Log.d(LOG_TAG, "Log saved in $FILE_NAME")
         } catch (e: IOException) {
-            Log.e(LOG_TAG, "Erro ao salvar log: ${e.message}")
+            Log.e(LOG_TAG, "Error in save log: ${e.message}")
         }
     }
 
