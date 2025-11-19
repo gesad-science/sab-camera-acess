@@ -4,19 +4,23 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.Gravity
 import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
 import files.LogHelper
 import helpers.CameraManager
 import helpers.FaceApiHelper
 import helpers.ImageAnalysisHelper
+import helpers.MARGIN_TOP_POPUP
 import helpers.PhotoCaptureHelper
 import ui.viewsmodel.FaceOverlayView
 import java.util.concurrent.ExecutorService
@@ -33,11 +37,15 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var imageAnalysisHelper: ImageAnalysisHelper
     private lateinit var photoCaptureHelper: PhotoCaptureHelper
     private lateinit var apiUrl: String
+    private lateinit var function: String
+    private lateinit var userName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
         apiUrl = intent.getStringExtra("api_url") ?: ""
+        function = intent.getStringExtra("function") ?: ""
+        userName = intent.getStringExtra("username") ?: "User"
         initViews()
         initDependencies()
         setupPermissions()
@@ -82,9 +90,13 @@ class CameraActivity : AppCompatActivity() {
     private fun setupClickListeners() {
         findViewById<Button>(R.id.btnTakePhoto).setOnClickListener {
             takePhoto()
+            showSnackbar("Photo sent for recognition")
         }
         findViewById<ImageView>(R.id.buttonBack).setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
+            val intent = Intent(this, HomeActivity::class.java)
+            intent.putExtra("function", function)
+            intent.putExtra("username", userName)
+            startActivity(intent)
         }
     }
 
@@ -108,6 +120,19 @@ class CameraActivity : AppCompatActivity() {
                 LogHelper.log(this, error)
             },
         )
+    }
+
+    fun showSnackbar(
+        message: String,
+        duration: Int = Snackbar.LENGTH_SHORT,
+    ) {
+        val snackbar = Snackbar.make(findViewById(android.R.id.content), message, duration)
+        val view = snackbar.view
+        val params = view.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.TOP
+        params.topMargin = MARGIN_TOP_POPUP
+        view.layoutParams = params
+        snackbar.show()
     }
 
     override fun onStart() {

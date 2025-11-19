@@ -6,27 +6,24 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import dao.UserDao
 import model.User
+
 @Database(entities = [User::class], version = 1, exportSchema = false)
 abstract class UserDatabase : RoomDatabase() {
-
     abstract fun userDao(): UserDao
 
     companion object {
-        @Volatile private var INSTANCE: UserDatabase? = null
+        @Volatile private var instanceDatabase: UserDatabase? = null
 
-        fun getDatabase(context: Context): UserDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    UserDatabase::class.java,
-                    "users_db"
-                )
-                    .fallbackToDestructiveMigration(true)
+        fun getDatabase(context: Context): UserDatabase =
+            instanceDatabase ?: synchronized(this) {
+                Room
+                    .databaseBuilder(
+                        context.applicationContext,
+                        UserDatabase::class.java,
+                        "users_db",
+                    ).fallbackToDestructiveMigration(true)
                     .build()
-
-                INSTANCE = instance
-                instance
+                    .also { instanceDatabase = it }
             }
-        }
     }
 }

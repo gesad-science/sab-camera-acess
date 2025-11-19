@@ -20,8 +20,11 @@
     <string name="password">Password</string>
     <string name="confirm">Confirm</string>
     <string name="administrator">Administrator</string>
-    <string name="user">User</string>
+    <string name="teacher">Teacher</string>
     <string name="register_attendance">Register Attendance</string>
     <string name="validate_attendance">Validate Attendance</string>
+    <string name="logout">Logout</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_user">Bem-vindo, %1$s !</string>
 
 </resources>

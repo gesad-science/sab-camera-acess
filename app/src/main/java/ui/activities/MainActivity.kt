@@ -12,26 +12,26 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.sab.cameraacess.R
-import ui.viewsmodel.LoginViewModel
-import factory.LoginViewModelFactory
-import domain.usecase.LoginUseCase
-import repository.UserRepository
 import database.UserDatabase
-import androidx.lifecycle.repeatOnLifecycle
+import domain.usecase.LoginUseCase
+import factory.LoginViewModelFactory
+import helpers.MARGIN_TOP_POPUP
 import kotlinx.coroutines.launch
+import repository.UserRepository
+import ui.viewsmodel.LoginViewModel
 
 class MainActivity : AppCompatActivity() {
-
     private var loginDialog: AlertDialog? = null
     private val viewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(
             LoginUseCase(
                 UserRepository(
-                    UserDatabase.getDatabase(this).userDao()
-                )
-            )
+                    UserDatabase.getDatabase(this).userDao(),
+                ),
+            ),
         )
     }
 
@@ -40,15 +40,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         lifecycleScope.launch {
             UserRepository(
-                UserDatabase.getDatabase(this@MainActivity).userDao()
+                UserDatabase.getDatabase(this@MainActivity).userDao(),
             ).registerDefaultUser()
         }
         val button = findViewById<Button>(R.id.buttonLogin)
         button.setOnClickListener {
             showLoginDialog()
         }
-
-        observeLoginState()
     }
 
     private fun showLoginDialog() {
@@ -58,9 +56,11 @@ class MainActivity : AppCompatActivity() {
         val edtFun = dialogView.findViewById<RadioGroup>(R.id.radioGroupTypeUser)
         val btnConfirm = dialogView.findViewById<Button>(R.id.btnConfirm)
 
-        loginDialog = AlertDialog.Builder(this)
-            .setView(dialogView)
-            .create()
+        loginDialog =
+            AlertDialog
+                .Builder(this)
+                .setView(dialogView)
+                .create()
 
         loginDialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         loginDialog?.show()
@@ -69,23 +69,24 @@ class MainActivity : AppCompatActivity() {
             val typeUser = validateLoginInputs(edtUser, edtPass, edtFun)
 
             if (typeUser != null) {
+                val username = edtUser.text.toString().trim()
                 viewModel.login(
-                    edtUser.text.toString(),
+                    username,
                     edtPass.text.toString(),
-                    typeUser
+                    typeUser,
                 )
+                observeLoginState(username)
             }
-
         }
     }
+
     private fun validateLoginInputs(
         edtUser: EditText,
         edtPass: EditText,
-        edtFun: RadioGroup
+        edtFun: RadioGroup,
     ): String? {
-
         val password = edtPass.text.toString()
-        val username = edtUser.text.toString()
+        val username = edtUser.text.toString().trim()
         val selectedFunction = edtFun.checkedRadioButtonId
 
         if (username.isEmpty() || password.isEmpty() || selectedFunction == -1) {
@@ -100,8 +101,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun observeLoginState() {
+    private fun observeLoginState(username: String) {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loginState.collect { state ->
@@ -109,11 +109,13 @@ class MainActivity : AppCompatActivity() {
                         is LoginViewModel.LoginState.Success -> {
                             loginDialog?.dismiss()
                             val intent = Intent(this@MainActivity, HomeActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             intent.putExtra("function", state.function)
+                            intent.putExtra("username", username)
                             startActivity(intent)
                         }
                         is LoginViewModel.LoginState.Error -> {
-                            showSnackbar("User or password invalidates")
+                            showSnackbar("User or password or user type invalidates")
                         }
                         else -> Unit
                     }
@@ -122,12 +124,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-     fun showSnackbar(message: String, duration: Int = Snackbar.LENGTH_SHORT) {
+    fun showSnackbar(
+        message: String,
+        duration: Int = Snackbar.LENGTH_SHORT,
+    ) {
         val snackbar = Snackbar.make(findViewById(android.R.id.content), message, duration)
         val view = snackbar.view
         val params = view.layoutParams as FrameLayout.LayoutParams
         params.gravity = Gravity.TOP
-        params.topMargin = 80
+        params.topMargin = MARGIN_TOP_POPUP
         view.layoutParams = params
         snackbar.show()
     }

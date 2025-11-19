@@ -6,13 +6,12 @@ import helpers.ApiConfigManager
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.mockito.kotlin.verify
 import kotlin.test.assertEquals
 
 class ApiConfigManagerTest {
-
     private lateinit var context: Context
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
@@ -27,19 +26,19 @@ class ApiConfigManagerTest {
             context
                 .getSharedPreferences(
                     "api_config",
-                    Context.MODE_PRIVATE
-                )
+                    Context.MODE_PRIVATE,
+                ),
         ).thenReturn(sharedPrefs)
 
         `when`(
-            sharedPrefs.edit()
+            sharedPrefs.edit(),
         ).thenReturn(editor)
 
         `when`(
             editor.putString(
                 anyString(),
-                anyString()
-            )
+                anyString(),
+            ),
         ).thenReturn(editor)
 
         apiConfigManager = ApiConfigManager(context)

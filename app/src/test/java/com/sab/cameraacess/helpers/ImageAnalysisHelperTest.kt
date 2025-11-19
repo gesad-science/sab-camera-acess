@@ -23,7 +23,6 @@ const val ROTATION_DEGREES = 0
 const val IS_FRONT = false
 
 class ImageAnalysisHelperTest {
-
     private lateinit var helper: ImageAnalysisHelper
     private val faceDetectorManager: FaceDetectorManager = mock()
     private val faceOverlayView: FaceOverlayView = mock()
@@ -45,40 +44,46 @@ class ImageAnalysisHelperTest {
         val expectedScaleX = MOCK_WIDTH.toFloat() / MOCK_IMAGE_WIDTH.toFloat()
         val expectedScaleY = MOCK_HEIGHT.toFloat() / MOCK_IMAGE_HEIGHT.toFloat()
 
-        val result = helper.invokePrivateMapRectToView(
-            originalRect,
-            MOCK_IMAGE_WIDTH,
-            MOCK_IMAGE_HEIGHT,
-            ROTATION_DEGREES,
-            IS_FRONT
-        )
+        val result =
+            helper
+                .invokePrivateMapRectToView(
+                    originalRect,
+                    MOCK_IMAGE_WIDTH,
+                    MOCK_IMAGE_HEIGHT,
+                    ROTATION_DEGREES,
+                    IS_FRONT,
+                )
         val expectedRight = (originalRect.right * expectedScaleX).toInt()
         val expectedBottom = (originalRect.bottom * expectedScaleY).toInt()
         assertEquals(expectedRight, result.right)
         assertEquals(expectedBottom, result.bottom)
     }
+
     @Test
     fun `front and back camera must behave the same since flip is not implemented`() {
         val originalRect = Rect(0, 0, 100, 200)
-        val noFlip = helper.invokePrivateMapRectToView(
-            originalRect,
-            MOCK_IMAGE_WIDTH,
-            MOCK_IMAGE_HEIGHT,
-            ROTATION_DEGREES,
-            false
-        )
-        val flip = helper.invokePrivateMapRectToView(
-            originalRect,
-            MOCK_IMAGE_WIDTH,
-            MOCK_IMAGE_HEIGHT,
-            ROTATION_DEGREES,
-            true
-        )
 
+        val noFlip =
+            helper
+                .invokePrivateMapRectToView(
+                    originalRect,
+                    MOCK_IMAGE_WIDTH,
+                    MOCK_IMAGE_HEIGHT,
+                    ROTATION_DEGREES,
+                    false,
+                )
+        val flip =
+            helper
+                .invokePrivateMapRectToView(
+                    originalRect,
+                    MOCK_IMAGE_WIDTH,
+                    MOCK_IMAGE_HEIGHT,
+                    ROTATION_DEGREES,
+                    true,
+                )
         assertEquals(noFlip.left, flip.left)
         assertEquals(noFlip.right, flip.right)
     }
-
 }
 
 @Suppress("UNCHECKED_CAST")
@@ -89,15 +94,16 @@ private fun ImageAnalysisHelper.invokePrivateMapRectToView(
     rotationDegrees: Int,
     isFrontCamera: Boolean,
 ): Rect {
-    val method = ImageAnalysisHelper::class.java
-        .getDeclaredMethod(
-            "mapRectToView",
-            Rect::class.java,
-            Int::class.java,
-            Int::class.java,
-            Int::class.java,
-            Boolean::class.java
-        )
+    val method =
+        ImageAnalysisHelper::class.java
+            .getDeclaredMethod(
+                "mapRectToView",
+                Rect::class.java,
+                Int::class.java,
+                Int::class.java,
+                Int::class.java,
+                Boolean::class.java,
+            )
     method.isAccessible = true
     return method.invoke(this, rect, imageWidth, imageHeight, rotationDegrees, isFrontCamera) as Rect
 }

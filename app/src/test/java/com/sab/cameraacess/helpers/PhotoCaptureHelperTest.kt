@@ -5,7 +5,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class PhotoCaptureHelperTest {
-
     private val helper = PhotoCaptureHelperTestWrapper()
 
     @Test
@@ -18,8 +17,13 @@ class PhotoCaptureHelperTest {
         assertEquals(0, result.top)
     }
 }
+
 class PhotoCaptureHelperTestWrapper {
-    fun mapFaceRectToBitmap(rect: Rect, width: Int, height: Int): Rect {
+    fun mapFaceRectToBitmap(
+        rect: Rect,
+        width: Int,
+        height: Int,
+    ): Rect {
         val left = rect.left.coerceIn(0, width)
         val top = rect.top.coerceIn(0, height)
         val right = rect.right.coerceIn(0, width)
