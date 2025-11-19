@@ -1,8 +1,9 @@
-package ui
+package ui.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -10,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.sab.cameraacess.R
@@ -21,7 +23,7 @@ import java.util.concurrent.Executors
 
 private const val MARGIN_TOP = 80
 
-class MainActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
     private lateinit var photoManager: PhotoManager
     private lateinit var faceDetectorManager: FaceDetectorManager
     private lateinit var cameraExecutor: ExecutorService
@@ -29,15 +31,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_home)
         photoManager = PhotoManager(this)
         faceDetectorManager = FaceDetectorManager()
         cameraExecutor = Executors.newSingleThreadExecutor()
         apiConfigManager = ApiConfigManager(this)
         val message = intent.getStringExtra("snackbar_message")
+        val function = intent.getStringExtra("function")
+        val buttonRollCall = findViewById<Button>(R.id.buttonRollCall)
         message?.let {
             showSnackbar(it)
             intent.removeExtra("snackbar_message")
+        }
+        if(function == "Administrator") {
+            buttonRollCall.visibility = View.VISIBLE
+        } else {
+            buttonRollCall.visibility = View.GONE
         }
         findViewById<ImageView>(R.id.buttonConfiguration).setOnClickListener {
             val dialog = BottomSheetDialog(this)
@@ -67,18 +76,21 @@ class MainActivity : AppCompatActivity() {
             }
             dialog.show()
         }
-        findViewById<ImageButton>(R.id.buttonCameraIcon).setOnClickListener {
+        findViewById<ImageView>(R.id.buttonBack).setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+        findViewById<Button>(R.id.buttonCamera).setOnClickListener {
             val apiUrl = apiConfigManager.getFinalUrl()
             val modelName = apiConfigManager.getModelName()
             if (apiUrl.isEmpty() || modelName.isEmpty()) {
                 showSnackbar("Please configure the API URL and model first")
                 return@setOnClickListener
             }
-            val finalUrl = "$apiUrl/v1/$modelName"
+
             val intent =
                 Intent(this, CameraActivity::class.java)
                     .apply {
-                        putExtra("api_url", finalUrl)
+                        putExtra("api_url", apiUrl)
                         putExtra("model_name", modelName)
                         addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                     }

@@ -15,8 +15,9 @@ class ApiConfigManager(
         url: String,
         model: String,
     ) {
+        val finalUrl = "$url/v1/$model"
         prefs.edit().apply {
-            putString("api_url", url)
+            putString("api_url", finalUrl)
             putString("model_name", model)
             apply()
         }

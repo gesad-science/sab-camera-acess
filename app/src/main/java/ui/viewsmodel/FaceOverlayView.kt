@@ -1,4 +1,4 @@
-package ui
+package ui.viewsmodel
 
 import android.content.Context
 import android.graphics.Canvas

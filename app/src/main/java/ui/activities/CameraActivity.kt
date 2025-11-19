@@ -1,7 +1,12 @@
-package ui
+package ui.activities
 
+import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.view.PreviewView
@@ -13,6 +18,7 @@ import helpers.CameraManager
 import helpers.FaceApiHelper
 import helpers.ImageAnalysisHelper
 import helpers.PhotoCaptureHelper
+import ui.viewsmodel.FaceOverlayView
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -21,19 +27,17 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var faceDetectorManager: FaceDetectorManager
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var faceOverlayView: FaceOverlayView
-    private lateinit var permissionLauncher: androidx.activity.result.ActivityResultLauncher<String>
+    private lateinit var permissionLauncher: ActivityResultLauncher<String>
 
     private lateinit var cameraManager: CameraManager
     private lateinit var imageAnalysisHelper: ImageAnalysisHelper
     private lateinit var photoCaptureHelper: PhotoCaptureHelper
     private lateinit var apiUrl: String
-    private lateinit var modelName: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
         apiUrl = intent.getStringExtra("api_url") ?: ""
-        modelName = intent.getStringExtra("model_name") ?: ""
         initViews()
         initDependencies()
         setupPermissions()
@@ -67,7 +71,7 @@ class CameraActivity : AppCompatActivity() {
                 }
             }
 
-        val permission = android.Manifest.permission.CAMERA
+        val permission = Manifest.permission.CAMERA
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
             startCamera()
         } else {
@@ -76,8 +80,11 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
-        findViewById<android.widget.Button>(R.id.btnTakePhoto).setOnClickListener {
+        findViewById<Button>(R.id.btnTakePhoto).setOnClickListener {
             takePhoto()
+        }
+        findViewById<ImageView>(R.id.buttonBack).setOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
         }
     }
 

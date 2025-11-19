@@ -10,7 +10,7 @@ import androidx.camera.view.PreviewView
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.face.Face
 import face.FaceDetectorManager
-import ui.FaceOverlayView
+import ui.viewsmodel.FaceOverlayView
 
 class ImageAnalysisHelper(
     private val faceDetectorManager: FaceDetectorManager,
