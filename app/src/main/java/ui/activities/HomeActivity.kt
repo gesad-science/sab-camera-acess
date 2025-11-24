@@ -15,11 +15,11 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import api.ApiConfigManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
-import helpers.ApiConfigManager
 import helpers.MARGIN_TOP_POPUP
 import photos.PhotoManager
 import java.util.concurrent.ExecutorService
@@ -34,61 +34,86 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
         photoManager = PhotoManager(this)
         faceDetectorManager = FaceDetectorManager()
         cameraExecutor = Executors.newSingleThreadExecutor()
         apiConfigManager = ApiConfigManager(this)
         val textWelcome = findViewById<TextView>(R.id.textWelcome)
-        val message = intent.getStringExtra("snackbar_message")
-        val function = intent.getStringExtra("function")
         val userName = intent.getStringExtra("username") ?: "User"
         textWelcome.text = getString(R.string.welcome_user, userName)
-        onBackPressedDispatcher
-            .addCallback(
-                this,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        // Ignore back button
-                    }
-                },
-            )
-        val textLogout = findViewById<TextView>(R.id.textLogout)
-        setupLogoutText(textLogout)
-        val buttonRollCall = findViewById<Button>(R.id.buttonRollCall)
-        message?.let {
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    // Ignore back button
+                }
+            },
+        )
+        setupLogoutText(findViewById(R.id.textLogout))
+
+        intent.getStringExtra("snackbar_message")?.let {
             showSnackbar(it)
             intent.removeExtra("snackbar_message")
         }
-        if (function == "Administrator") {
-            buttonRollCall.visibility = View.VISIBLE
-        } else {
-            buttonRollCall.visibility = View.GONE
-        }
+
+        setupVisibility()
+        setupConfigurationButton()
+        setupCameraButton()
+        setupRollCallButton()
+    }
+
+    private fun setupVisibility() {
+        val buttonRollCall = findViewById<Button>(R.id.buttonRollCall)
+        val function = intent.getStringExtra("function")
+        buttonRollCall.visibility =
+            if (function == "Administrator") View.VISIBLE else View.GONE
+    }
+
+    private fun setupConfigurationButton() {
         findViewById<ImageView>(R.id.buttonConfiguration).setOnClickListener {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.layout_configuration_bottomsheet, null)
             dialog.setContentView(view)
+
             val inputApiUrl = view.findViewById<EditText>(R.id.inputApiUrl)
             val radioGroupModel = view.findViewById<RadioGroup>(R.id.radioGroupModel)
             val buttonSave = view.findViewById<Button>(R.id.buttonSaveConfig)
+
             buttonSave.setOnClickListener {
                 saveApiConfig(inputApiUrl, radioGroupModel, apiConfigManager, dialog)
             }
             dialog.show()
         }
+    }
+
+    private fun setupCameraButton() {
         findViewById<Button>(R.id.buttonCamera).setOnClickListener {
             val apiUrl = apiConfigManager.getFinalUrl()
             val modelName = apiConfigManager.getModelName()
-            if (isApiConfigValid()) return@setOnClickListener
+            if (!isApiConfigValid()) return@setOnClickListener
+
             val intent =
-                Intent(this, CameraActivity::class.java)
-                    .apply {
-                        putExtra("api_url", apiUrl)
-                        putExtra("model_name", modelName)
-                        putExtra("function", function)
-                        putExtra("username", userName)
-                        addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                    }
+                Intent(this, CameraActivity::class.java).apply {
+                    putExtra("api_url", apiUrl)
+                    putExtra("model_name", modelName)
+                    putExtra("function", intent.getStringExtra("function"))
+                    putExtra("username", intent.getStringExtra("username") ?: "User")
+                    addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                }
+            startActivity(intent)
+        }
+    }
+
+    private fun setupRollCallButton() {
+        val buttonRollCall = findViewById<Button>(R.id.buttonRollCall)
+        buttonRollCall.setOnClickListener {
+            val intent =
+                Intent(this, RollCallActivity::class.java).apply {
+                    putExtra("function", intent.getStringExtra("function"))
+                    putExtra("username", intent.getStringExtra("username") ?: "User")
+                    addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                }
             startActivity(intent)
         }
     }

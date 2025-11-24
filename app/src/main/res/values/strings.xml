@@ -25,6 +25,9 @@
     <string name="validate_attendance">Validate Attendance</string>
     <string name="logout">Logout</string>
     <string name="welcome">Welcome</string>
-    <string name="welcome_user">Bem-vindo, %1$s !</string>
-
+    <string name="welcome_user">Welcome, %1$s !</string>
+    <string name="school_roll_call">School Roll Call</string>
+    <string name="name">Name</string>
+    <string name="registration">Registration</string>
+    <string name="status">Status</string>
 </resources>

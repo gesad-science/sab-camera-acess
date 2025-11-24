@@ -2,7 +2,7 @@ package com.sab.cameraacess.helpers
 
 import android.content.Context
 import android.content.SharedPreferences
-import helpers.ApiConfigManager
+import api.ApiConfigManager
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString

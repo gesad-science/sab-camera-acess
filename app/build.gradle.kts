@@ -43,6 +43,8 @@ dependencies {
     implementation("com.google.mlkit:face-detection:16.1.6")
     implementation(libs.androidx.foundation)
     implementation(libs.material3)
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.google.firebase:firebase-firestore-ktx:24.5.0")
     implementation(libs.androidx.room.ktx)

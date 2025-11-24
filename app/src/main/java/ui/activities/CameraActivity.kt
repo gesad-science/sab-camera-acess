@@ -13,12 +13,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import api.FaceApiHelper
 import com.google.android.material.snackbar.Snackbar
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
 import files.LogHelper
 import helpers.CameraManager
-import helpers.FaceApiHelper
 import helpers.ImageAnalysisHelper
 import helpers.MARGIN_TOP_POPUP
 import helpers.PhotoCaptureHelper
