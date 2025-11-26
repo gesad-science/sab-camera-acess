@@ -7,86 +7,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
-    tools:context="ui.MainActivity">
+    tools:context="ui.activities.MainActivity">
+
     <TextView
         android:id="@+id/textViewTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/face_detection_system"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:fontFamily="sans-serif-medium"
-        android:layout_marginTop="48dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewSubtitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/use_the_camera_to_test_the_facial_recognition_system"
-        android:textColor="#CCFFFFFF"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintTop_toBottomOf="@id/textViewTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ImageButton
-        android:id="@+id/buttonCameraIcon"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="384dp"
+        android:layout_height="62dp"
         android:layout_marginTop="172dp"
-        android:background="@drawable/circle_button_bg"
-        android:contentDescription="@string/open_camera"
-        android:padding="20dp"
-        android:src="@drawable/baseline_photo_camera_24"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/face_detection_system"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textViewSubtitle"
-        app:tint="@android:color/white" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/buttonConfiguration"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:src="@drawable/settings"
-        android:contentDescription="@string/button_of_camera_configuration"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp" />
-
-
-
-    <TextView
-        android:id="@+id/textViewHint"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/buttonLogin"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
-        android:text="@string/tap_the_icon_to_open_the_camera"
-        android:textColor="#CCFFFFFF"
-        android:textSize="13sp"
+        android:background="@drawable/bg_dialog"
+        android:text="@string/login"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonCameraIcon" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.482" />
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="129dp"
         android:layout_height="75dp"
         android:layout_marginBottom="32dp"
         android:src="@drawable/engrenagemlogo"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

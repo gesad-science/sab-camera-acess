@@ -13,5 +13,21 @@
     <string name="save">Save</string>
     <string name="resnet">ResNet</string>
     <string name="mobilenet">MobileNet</string>
-
+    <string name="button_of_back_view">Button of back view</string>
+    <string name="login">Login</string>
+    <string name="login_view">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm">Confirm</string>
+    <string name="administrator">Administrator</string>
+    <string name="teacher">Teacher</string>
+    <string name="register_attendance">Register Attendance</string>
+    <string name="validate_attendance">Validate Attendance</string>
+    <string name="logout">Logout</string>
+    <string name="welcome">Welcome</string>
+    <string name="welcome_user">Welcome, %1$s !</string>
+    <string name="school_roll_call">School Roll Call</string>
+    <string name="name">Name</string>
+    <string name="registration">Registration</string>
+    <string name="status">Status</string>
 </resources>

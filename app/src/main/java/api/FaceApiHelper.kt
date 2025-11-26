@@ -1,9 +1,10 @@
-package helpers
+package api
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.Base64
 import files.LogHelper
+import helpers.QUALITY_CAMERA
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType

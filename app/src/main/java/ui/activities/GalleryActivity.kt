@@ -1,4 +1,4 @@
-package ui
+package ui.activities
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
