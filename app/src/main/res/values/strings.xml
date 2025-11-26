@@ -30,4 +30,6 @@
     <string name="name">Name</string>
     <string name="registration">Registration</string>
     <string name="status">Status</string>
+    <string name="icon_logout">Icon logout</string>
+    <string name="image_home_page_app">image home page app</string>
 </resources>
