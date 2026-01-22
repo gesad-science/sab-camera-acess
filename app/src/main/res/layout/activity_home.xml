@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -9,19 +8,61 @@
     android:background="@drawable/gradient"
     tools:context="ui.activities.HomeActivity">
 
+    <ImageView
+        android:id="@+id/imageCall"
+        android:layout_width="477dp"
+        android:layout_height="271dp"
+        android:contentDescription="@string/image_home_page_app"
+        android:src="@drawable/image_call"
+        app:layout_constraintBottom_toTopOf="@+id/textViewTitle"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <android.widget.Button
+        android:id="@+id/buttonLogout"
+        android:layout_width="246dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginBottom="260dp"
+        android:background="@drawable/bg_dialog"
+        android:drawableEnd="@drawable/icon_logout"
+        android:text="@string/logout"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCamera"
+        app:layout_constraintVertical_bias="0.401" />
+
+    <android.widget.Button
+        android:id="@+id/buttonCamera"
+        android:layout_width="246dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_dialog"
+        android:drawableEnd="@drawable/icon_camera"
+        android:text="@string/register_attendance"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.625" />
 
     <TextView
         android:id="@+id/textViewTitle"
-        android:layout_width="373dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="176dp"
+        android:layout_width="246dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="296dp"
         android:fontFamily="sans-serif-medium"
         android:text="@string/face_detection_system"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="28sp"
+        android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.421"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,56 +70,31 @@
         android:id="@+id/textWelcome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:text="Welcome, Paulo Henrique !"
         android:textAlignment="center"
-        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonCamera"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"/>
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
+        app:layout_constraintVertical_bias="0.289" />
 
-    <Button
-        android:id="@+id/buttonCamera"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_dialog"
-        android:text="@string/register_attendance"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.461" />
-
-    <Button
+    <android.widget.Button
         android:id="@+id/buttonRollCall"
-        android:layout_width="280dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_width="246dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="190dp"
         android:background="@drawable/bg_dialog"
+        android:drawableEnd="@drawable/icon_check"
         android:text="@string/validate_attendance"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonCamera"
-        app:layout_constraintVertical_bias="0.235" />
-
-    <TextView
-        android:id="@+id/textLogout"
-        android:layout_width="276dp"
-        android:layout_height="46dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="8dp"
-        android:text="@string/logout"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRollCall" />
+        app:layout_constraintVertical_bias="0.24" />
 
     <ImageView
         android:id="@+id/buttonConfiguration"
@@ -101,7 +117,9 @@
         android:src="@drawable/engrenagemlogo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogout"
+        app:layout_constraintVertical_bias="0.945" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

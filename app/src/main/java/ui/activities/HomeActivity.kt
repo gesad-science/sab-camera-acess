@@ -2,8 +2,6 @@ package ui.activities
 
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -50,7 +48,12 @@ class HomeActivity : AppCompatActivity() {
                 }
             },
         )
-        setupLogoutText(findViewById(R.id.textLogout))
+        findViewById<Button>(R.id.buttonLogout).setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+        }
 
         intent.getStringExtra("snackbar_message")?.let {
             showSnackbar(it)
@@ -152,21 +155,6 @@ class HomeActivity : AppCompatActivity() {
         apiConfigManager.setConfig(url, model)
         showSnackbar("Configuration Saved")
         dialog.dismiss()
-    }
-
-    private fun setupLogoutText(textView: TextView) {
-        textView.apply {
-            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG
-            setTextColor(Color.BLUE)
-            isClickable = true
-            isFocusable = true
-            setOnClickListener {
-                val intent = Intent(context, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-            }
-        }
     }
 
     private fun showSnackbar(
