@@ -25,11 +25,13 @@
     <string name="validate_attendance">Validate Attendance</string>
     <string name="logout">Logout</string>
     <string name="welcome">Welcome</string>
-    <string name="welcome_user">Welcome, %1$s !</string>
+    <string name="welcome_user">Welcome Back, %1$s!</string>
     <string name="school_roll_call">School Roll Call</string>
     <string name="name">Name</string>
     <string name="registration">Registration</string>
     <string name="status">Status</string>
     <string name="icon_logout">Icon logout</string>
     <string name="image_home_page_app">image home page app</string>
+    <string name="smart_attendance_board">Smart Attendance Board</string>
+    <string name="today_s_date">Today\'s Date</string>
 </resources>

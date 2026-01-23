@@ -1,25 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="#F9FAFB"
     tools:context="ui.activities.HomeActivity">
 
-    <ImageView
-        android:id="@+id/imageCall"
-        android:layout_width="477dp"
-        android:layout_height="271dp"
-        android:contentDescription="@string/image_home_page_app"
-        android:src="@drawable/image_call"
-        app:layout_constraintBottom_toTopOf="@+id/textViewTitle"
-        app:layout_constraintDimensionRatio="1:1"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/bg_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/textNameProject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/smart_attendance_board"
+            android:textColor="@color/purple_text"
+            android:textSize="28sp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginStart="100dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/subtitleNameProject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:layout_marginStart="100dp"
+            android:text="Student Attendance Management"
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textNameProject"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/boxWelcome"
+        android:layout_width="1078dp"
+        android:layout_height="210dp"
+        android:layout_marginTop="55dp"
+        android:background="@drawable/gradient"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/textWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Welcome Back, Mr. Paulo Henrique!"
+            android:textColor="@color/white"
+            android:textSize="30dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="40dp"
+            android:textSize="20dp"
+            android:text="Ready to take attendance for today's class?"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:orientation="vertical"
+            android:layout_marginRight="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/bg_date">
+
+            <TextView
+                android:id="@+id/textToday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/today_s_date"
+                android:textColor="#DBEAFE"
+                android:textSize="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textDate"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textToday"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="35dp"
+                android:text="Jan 19, 2026"
+            />
+
+            <TextView
+                android:id="@+id/textTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:text="8:24 AM"
+                android:layout_marginTop="40dp"
+            />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <android.widget.Button
+        android:id="@+id/buttonCamera"
+        android:layout_width="246dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_dialog"
+        android:drawableEnd="@drawable/icon_camera"
+        android:text="@string/register_attendance"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.5" />
+        app:layout_constraintTop_toTopOf="@id/boxWelcome"
+        app:layout_constraintVertical_bias="0.625" />
+
+
+    <android.widget.Button
+        android:id="@+id/buttonRollCall"
+        android:layout_width="246dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="190dp"
+        android:background="@drawable/bg_dialog"
+        android:drawableEnd="@drawable/icon_check"
+        android:text="@string/validate_attendance"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonCamera"
+        app:layout_constraintVertical_bias="0.24" />
 
     <android.widget.Button
         android:id="@+id/buttonLogout"
@@ -37,71 +183,12 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonCamera"
         app:layout_constraintVertical_bias="0.401" />
 
-    <android.widget.Button
-        android:id="@+id/buttonCamera"
-        android:layout_width="246dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_dialog"
-        android:drawableEnd="@drawable/icon_camera"
-        android:text="@string/register_attendance"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625" />
-
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="246dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="296dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="@string/face_detection_system"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textWelcome"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Welcome, Paulo Henrique !"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonCamera"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
-        app:layout_constraintVertical_bias="0.289" />
-
-    <android.widget.Button
-        android:id="@+id/buttonRollCall"
-        android:layout_width="246dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="190dp"
-        android:background="@drawable/bg_dialog"
-        android:drawableEnd="@drawable/icon_check"
-        android:text="@string/validate_attendance"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCamera"
-        app:layout_constraintVertical_bias="0.24" />
-
     <ImageView
         android:id="@+id/buttonConfiguration"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginTop="748dp"
+        android:layout_marginEnd="52dp"
         android:clickable="true"
         android:contentDescription="@string/button_of_camera_configuration"
         android:focusable="true"
@@ -109,17 +196,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="129dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="48dp"
-        android:src="@drawable/engrenagemlogo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogout"
-        app:layout_constraintVertical_bias="0.945" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

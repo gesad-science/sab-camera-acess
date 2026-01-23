@@ -20,6 +20,10 @@ import com.sab.cameraacess.R
 import face.FaceDetectorManager
 import helpers.MARGIN_TOP_POPUP
 import photos.PhotoManager
+import java.text.SimpleDateFormat
+import java.util.*
+import android.os.Handler
+import android.os.Looper
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -28,6 +32,9 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var faceDetectorManager: FaceDetectorManager
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var apiConfigManager: ApiConfigManager
+    private lateinit var textDate: TextView
+    private lateinit var textTime: TextView
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +47,9 @@ class HomeActivity : AppCompatActivity() {
         val textWelcome = findViewById<TextView>(R.id.textWelcome)
         val userName = intent.getStringExtra("username") ?: "User"
         textWelcome.text = getString(R.string.welcome_user, userName)
+        textDate = findViewById(R.id.textDate)
+        textTime = findViewById(R.id.textTime)
+        updateDateTimeRunnable.run()
         onBackPressedDispatcher.addCallback(
             this,
             object : OnBackPressedCallback(true) {
@@ -157,6 +167,20 @@ class HomeActivity : AppCompatActivity() {
         dialog.dismiss()
     }
 
+    private val updateDateTimeRunnable = object : Runnable {
+        override fun run() {
+            val timeZone = TimeZone.getTimeZone("America/Sao_Paulo")
+            val calendar = Calendar.getInstance(timeZone)
+            val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+            dateFormatter.timeZone = timeZone
+            timeFormatter.timeZone = timeZone
+            val now = calendar.time
+            textDate.text = dateFormatter.format(now)
+            textTime.text = timeFormatter.format(now)
+            handler.postDelayed(this, 60_000)
+        }
+    }
     private fun showSnackbar(
         message: String,
         duration: Int = Snackbar.LENGTH_SHORT,
@@ -179,6 +203,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        handler.removeCallbacks(updateDateTimeRunnable)
         cameraExecutor.shutdown()
     }
 }
