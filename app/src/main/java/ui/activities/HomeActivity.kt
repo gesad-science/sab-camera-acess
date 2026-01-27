@@ -77,7 +77,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupVisibility() {
-        val buttonRollCall = findViewById<Button>(R.id.buttonRollCall)
+        val buttonRollCall = findViewById<ImageView>(R.id.buttonRollCall)
         val function = intent.getStringExtra("function")
         buttonRollCall.visibility =
             if (function == "Administrator") View.VISIBLE else View.GONE
@@ -119,7 +119,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupRollCallButton() {
-        val buttonRollCall = findViewById<Button>(R.id.buttonRollCall)
+        val buttonRollCall = findViewById<ImageView>(R.id.buttonRollCall)
         buttonRollCall.setOnClickListener {
             val intent =
                 Intent(this, RollCallActivity::class.java).apply {

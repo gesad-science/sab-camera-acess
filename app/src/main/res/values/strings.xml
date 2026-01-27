@@ -34,4 +34,27 @@
     <string name="image_home_page_app">image home page app</string>
     <string name="smart_attendance_board">Smart Attendance Board</string>
     <string name="today_s_date">Today\'s Date</string>
+    <string name="student_attendance_management">Student Attendance Management</string>
+    <string name="welcome_back_mr_paulo_henrique">Welcome Back, Mr. Paulo Henrique!</string>
+    <string name="ready_to_take_attendance_for_today_s_class">Ready to take attendance for today\'s class?</string>
+    <string name="jan_19_2026">Jan 19, 2026</string>
+    <string name="_8_24_am">8:24 AM</string>
+    <string name="mr_paulo_henrique">Mr. Paulo Henrique</string>
+    <string name="extens_o_3">Extensão 3</string>
+    <string name="image_account">Image Account</string>
+    <string name="logo_account_image">Logo Account Image</string>
+    <string name="total_students">Total Students</string>
+    <string name="_32">32</string>
+    <string name="students_image">Students image</string>
+    <string name="present_today">Present Today</string>
+    <string name="_28">28</string>
+    <string name="present_image">Present Image</string>
+    <string name="open_the_school_attendance_list">Open the school attendance list</string>
+    <string name="validate_attendance_title">Validate Attendance</string>
+    <string name="start_facial_recognition_based_attendance">Start facial recognition-based attendance</string>
+    <string name="register_attendance_title">Register Attendance</string>
+    <string name="logo_register_attendance_button">Logo Register Attendance Button</string>
+    <string name="attendance_rate">Attendance Rate</string>
+    <string name="_87_5">87.5%</string>
+    <string name="quick_actions">Quick Actions</string>
 </resources>
