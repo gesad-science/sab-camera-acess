@@ -1,31 +1,31 @@
 package ui.activities
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import api.ApiConfigManager
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
 import helpers.MARGIN_TOP_POPUP
 import photos.PhotoManager
 import java.text.SimpleDateFormat
-import java.util.*
-import android.os.Handler
-import android.os.Looper
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+
+const val DELAY_TIME_DATE = 60_000L
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var photoManager: PhotoManager
@@ -58,12 +58,12 @@ class HomeActivity : AppCompatActivity() {
                 }
             },
         )
-        findViewById<Button>(R.id.buttonLogout).setOnClickListener {
+        /*findViewById<Button>(R.id.buttonLogout).setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
-        }
+        }*/
 
         intent.getStringExtra("snackbar_message")?.let {
             showSnackbar(it)
@@ -71,7 +71,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         setupVisibility()
-        setupConfigurationButton()
+        // setupConfigurationButton()
         setupCameraButton()
         setupRollCallButton()
     }
@@ -83,7 +83,7 @@ class HomeActivity : AppCompatActivity() {
             if (function == "Administrator") View.VISIBLE else View.GONE
     }
 
-    private fun setupConfigurationButton() {
+    /*private fun setupConfigurationButton() {
         findViewById<ImageView>(R.id.buttonConfiguration).setOnClickListener {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.layout_configuration_bottomsheet, null)
@@ -98,7 +98,7 @@ class HomeActivity : AppCompatActivity() {
             }
             dialog.show()
         }
-    }
+    }*/
 
     private fun setupCameraButton() {
         findViewById<Button>(R.id.buttonCamera).setOnClickListener {
@@ -142,7 +142,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveApiConfig(
+    /*private fun saveApiConfig(
         inputApiUrl: EditText,
         radioGroupModel: RadioGroup,
         apiConfigManager: ApiConfigManager,
@@ -166,21 +166,23 @@ class HomeActivity : AppCompatActivity() {
         showSnackbar("Configuration Saved")
         dialog.dismiss()
     }
-
-    private val updateDateTimeRunnable = object : Runnable {
-        override fun run() {
-            val timeZone = TimeZone.getTimeZone("America/Sao_Paulo")
-            val calendar = Calendar.getInstance(timeZone)
-            val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-            val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
-            dateFormatter.timeZone = timeZone
-            timeFormatter.timeZone = timeZone
-            val now = calendar.time
-            textDate.text = dateFormatter.format(now)
-            textTime.text = timeFormatter.format(now)
-            handler.postDelayed(this, 60_000)
+*/
+    private val updateDateTimeRunnable =
+        object : Runnable {
+            override fun run() {
+                val timeZone = TimeZone.getTimeZone("America/Sao_Paulo")
+                val calendar = Calendar.getInstance(timeZone)
+                val dateFormatter = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+                val timeFormatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+                dateFormatter.timeZone = timeZone
+                timeFormatter.timeZone = timeZone
+                val now = calendar.time
+                textDate.text = dateFormatter.format(now)
+                textTime.text = timeFormatter.format(now)
+                handler.postDelayed(this, DELAY_TIME_DATE)
+            }
         }
-    }
+
     private fun showSnackbar(
         message: String,
         duration: Int = Snackbar.LENGTH_SHORT,
