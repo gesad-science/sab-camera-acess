@@ -177,8 +177,10 @@ class HomeActivity : AppCompatActivity() {
                 dateFormatter.timeZone = timeZone
                 timeFormatter.timeZone = timeZone
                 val now = calendar.time
-                textDate.text = dateFormatter.format(now)
-                textTime.text = timeFormatter.format(now)
+                if (!isFinishing && !isDestroyed) {
+                    textDate.text = dateFormatter.format(now)
+                    textTime.text = timeFormatter.format(now)
+                }
                 handler.postDelayed(this, DELAY_TIME_DATE)
             }
         }
