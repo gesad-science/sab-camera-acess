@@ -1,5 +1,6 @@
 package ui.activities
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -7,12 +8,15 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import api.ApiConfigManager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.sab.cameraacess.R
 import face.FaceDetectorManager
@@ -58,12 +62,6 @@ class HomeActivity : AppCompatActivity() {
                 }
             },
         )
-        /*findViewById<Button>(R.id.buttonLogout).setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
-        }*/
 
         intent.getStringExtra("snackbar_message")?.let {
             showSnackbar(it)
@@ -71,7 +69,7 @@ class HomeActivity : AppCompatActivity() {
         }
 
         setupVisibility()
-        // setupConfigurationButton()
+        setupConfigurationButton()
         setupCameraButton()
         setupRollCallButton()
     }
@@ -83,25 +81,45 @@ class HomeActivity : AppCompatActivity() {
             if (function == "Administrator") View.VISIBLE else View.GONE
     }
 
-    /*private fun setupConfigurationButton() {
-        findViewById<ImageView>(R.id.buttonConfiguration).setOnClickListener {
+    private fun setupConfigurationButton() {
+        findViewById<ImageView>(R.id.bgAccount).setOnClickListener {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.layout_configuration_bottomsheet, null)
             dialog.setContentView(view)
-
-            val inputApiUrl = view.findViewById<EditText>(R.id.inputApiUrl)
-            val radioGroupModel = view.findViewById<RadioGroup>(R.id.radioGroupModel)
-            val buttonSave = view.findViewById<Button>(R.id.buttonSaveConfig)
-
-            buttonSave.setOnClickListener {
-                saveApiConfig(inputApiUrl, radioGroupModel, apiConfigManager, dialog)
+            view.findViewById<Button>(R.id.buttonConfiguration).setOnClickListener {
+                dialog.dismiss()
+                showApiConfigBottomSheet()
             }
+            view.findViewById<Button>(R.id.buttonLogout).setOnClickListener {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                dialog.dismiss()
+                finish()
+            }
+
             dialog.show()
         }
-    }*/
+    }
+
+    private fun showApiConfigBottomSheet() {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.layout_configuration_api, null)
+        dialog.setContentView(view)
+
+        val inputApiUrl = view.findViewById<EditText>(R.id.inputApiUrl)
+        val radioGroupModel = view.findViewById<RadioGroup>(R.id.radioGroupModel)
+        val buttonSave = view.findViewById<Button>(R.id.buttonSaveConfig)
+
+        buttonSave.setOnClickListener {
+            saveApiConfig(inputApiUrl, radioGroupModel, apiConfigManager, dialog)
+        }
+
+        dialog.show()
+    }
 
     private fun setupCameraButton() {
-        findViewById<Button>(R.id.buttonCamera).setOnClickListener {
+        findViewById<ImageView>(R.id.buttonCamera).setOnClickListener {
             val apiUrl = apiConfigManager.getFinalUrl()
             val modelName = apiConfigManager.getModelName()
             if (!isApiConfigValid()) return@setOnClickListener
@@ -142,7 +160,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun saveApiConfig(
+    private fun saveApiConfig(
         inputApiUrl: EditText,
         radioGroupModel: RadioGroup,
         apiConfigManager: ApiConfigManager,
@@ -166,7 +184,7 @@ class HomeActivity : AppCompatActivity() {
         showSnackbar("Configuration Saved")
         dialog.dismiss()
     }
-*/
+
     private val updateDateTimeRunnable =
         object : Runnable {
             override fun run() {
@@ -177,8 +195,10 @@ class HomeActivity : AppCompatActivity() {
                 dateFormatter.timeZone = timeZone
                 timeFormatter.timeZone = timeZone
                 val now = calendar.time
-                textDate.text = dateFormatter.format(now)
-                textTime.text = timeFormatter.format(now)
+                if (!isFinishing && !isDestroyed) {
+                    textDate.text = dateFormatter.format(now)
+                    textTime.text = timeFormatter.format(now)
+                }
                 handler.postDelayed(this, DELAY_TIME_DATE)
             }
         }

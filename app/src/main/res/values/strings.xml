@@ -14,7 +14,7 @@
     <string name="resnet">ResNet</string>
     <string name="mobilenet">MobileNet</string>
     <string name="button_of_back_view">Button of back view</string>
-    <string name="login">Login</string>
+    <string name="login">Login to continue</string>
     <string name="login_view">Login</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -57,4 +57,5 @@
     <string name="attendance_rate">Attendance Rate</string>
     <string name="_87_5">87.5%</string>
     <string name="quick_actions">Quick Actions</string>
+    <string name="configuration_api">Configuration API</string>
 </resources>

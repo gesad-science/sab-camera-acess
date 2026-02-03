@@ -94,6 +94,8 @@
                 android:layout_marginEnd="60dp"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:contentDescription="@string/image_account"
                 app:srcCompat="@drawable/bg_account"
                 />
@@ -554,34 +556,4 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-<!--
-    <android.widget.Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="246dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="59dp"
-        android:layout_marginBottom="260dp"
-        android:background="@drawable/bg_dialog"
-        android:drawableEnd="@drawable/icon_logout"
-        android:text="@string/logout"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCamera"
-        app:layout_constraintVertical_bias="0.401" />
-
-    <ImageView
-        android:id="@+id/buttonConfiguration"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="748dp"
-        android:layout_marginEnd="52dp"
-        android:clickable="true"
-        android:contentDescription="@string/button_of_camera_configuration"
-        android:focusable="true"
-        android:src="@drawable/settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
--->
 </androidx.appcompat.widget.LinearLayoutCompat>
