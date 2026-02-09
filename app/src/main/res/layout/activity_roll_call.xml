@@ -99,7 +99,6 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
-
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="570dp"
@@ -108,7 +107,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         >
-
         <LinearLayout
             android:id="@+id/header_table"
             android:layout_width="1192dp"
