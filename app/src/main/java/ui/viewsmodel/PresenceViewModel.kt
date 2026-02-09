@@ -17,7 +17,12 @@ class PresenceViewModel : ViewModel() {
     fun loadPresences() {
         viewModelScope.launch {
             try {
-                val response = RetrofitClient.instance.getPresences()
+                val response =
+                    kotlinx.coroutines.withContext(
+                        kotlinx.coroutines.Dispatchers.IO,
+                    ) {
+                        RetrofitClient.instance.getPresences()
+                    }
 
                 val presentStudents =
                     response.records
@@ -38,10 +43,10 @@ class PresenceViewModel : ViewModel() {
                         student.copy(present = presentStudents.contains(student.name))
                     }
             } catch (e: IOException) {
-                e.printStackTrace()
+                android.util.Log.e("PresenceViewModel", "Erro de IO", e)
                 _students.value = emptyList()
             } catch (e: HttpException) {
-                e.printStackTrace()
+                android.util.Log.e("PresenceViewModel", "Erro HTTP", e)
                 _students.value = emptyList()
             }
         }
