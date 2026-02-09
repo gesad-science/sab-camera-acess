@@ -18,11 +18,12 @@ class PresenceViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response = RetrofitClient.instance.getPresences()
+
                 val presentStudents =
-                    response
-                        .records
-                        .map { it.faceName }
-                        .distinct()
+                    response.records
+                        ?.mapNotNull { it.faceName }
+                        ?.distinct()
+                        ?: emptyList()
 
                 val allStudents =
                     listOf(
@@ -31,16 +32,17 @@ class PresenceViewModel : ViewModel() {
                         Student("Paulo Henrique Maia", "11224", false),
                         Student("Ana Oliveira", "44556", false),
                     )
-                val updatedList =
-                    allStudents
-                        .map { student ->
-                            student.copy(present = presentStudents.contains(student.name))
-                        }
-                _students.value = updatedList
+
+                _students.value =
+                    allStudents.map { student ->
+                        student.copy(present = presentStudents.contains(student.name))
+                    }
             } catch (e: IOException) {
                 e.printStackTrace()
+                _students.value = emptyList()
             } catch (e: HttpException) {
                 e.printStackTrace()
+                _students.value = emptyList()
             }
         }
     }
