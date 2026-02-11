@@ -1,6 +1,5 @@
 package ui.activities
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,10 +7,8 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -47,7 +44,7 @@ class HomeActivity : AppCompatActivity() {
         photoManager = PhotoManager(this)
         faceDetectorManager = FaceDetectorManager()
         cameraExecutor = Executors.newSingleThreadExecutor()
-        apiConfigManager = ApiConfigManager(this)
+        apiConfigManager = ApiConfigManager
         val textWelcome = findViewById<TextView>(R.id.textWelcome)
         val userName = intent.getStringExtra("username") ?: "User"
         textWelcome.text = getString(R.string.welcome_user, userName)
@@ -82,14 +79,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupConfigurationButton() {
-        findViewById<ImageView>(R.id.bgAccount).setOnClickListener {
+        findViewById<ImageView>(R.id.logoAccount).setOnClickListener {
             val dialog = BottomSheetDialog(this)
             val view = layoutInflater.inflate(R.layout.layout_configuration_bottomsheet, null)
             dialog.setContentView(view)
-            view.findViewById<Button>(R.id.buttonConfiguration).setOnClickListener {
-                dialog.dismiss()
-                showApiConfigBottomSheet()
-            }
             view.findViewById<Button>(R.id.buttonLogout).setOnClickListener {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -102,32 +95,10 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun showApiConfigBottomSheet() {
-        val dialog = BottomSheetDialog(this)
-        val view = layoutInflater.inflate(R.layout.layout_configuration_api, null)
-        dialog.setContentView(view)
-
-        val inputApiUrl = view.findViewById<EditText>(R.id.inputApiUrl)
-        val radioGroupModel = view.findViewById<RadioGroup>(R.id.radioGroupModel)
-        val buttonSave = view.findViewById<Button>(R.id.buttonSaveConfig)
-
-        buttonSave.setOnClickListener {
-            saveApiConfig(inputApiUrl, radioGroupModel, apiConfigManager, dialog)
-        }
-
-        dialog.show()
-    }
-
     private fun setupCameraButton() {
         findViewById<ImageView>(R.id.buttonCamera).setOnClickListener {
-            val apiUrl = apiConfigManager.getFinalUrl()
-            val modelName = apiConfigManager.getModelName()
-            if (!isApiConfigValid()) return@setOnClickListener
-
             val intent =
                 Intent(this, CameraActivity::class.java).apply {
-                    putExtra("api_url", apiUrl)
-                    putExtra("model_name", modelName)
                     putExtra("function", intent.getStringExtra("function"))
                     putExtra("username", intent.getStringExtra("username") ?: "User")
                     addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
@@ -147,42 +118,6 @@ class HomeActivity : AppCompatActivity() {
                 }
             startActivity(intent)
         }
-    }
-
-    private fun isApiConfigValid(): Boolean {
-        val apiUrl = apiConfigManager.getFinalUrl()
-        val modelName = apiConfigManager.getModelName()
-        return if (apiUrl.isEmpty() || modelName.isEmpty()) {
-            showSnackbar("Please configure the API URL and model first")
-            false
-        } else {
-            true
-        }
-    }
-
-    private fun saveApiConfig(
-        inputApiUrl: EditText,
-        radioGroupModel: RadioGroup,
-        apiConfigManager: ApiConfigManager,
-        dialog: Dialog,
-    ) {
-        val url = inputApiUrl.text.toString()
-        val selectedRadioId = radioGroupModel.checkedRadioButtonId
-
-        if (url.isEmpty() || selectedRadioId == -1) {
-            showSnackbar("Fill in all the fields")
-            return
-        }
-
-        val model =
-            when (selectedRadioId) {
-                R.id.radioResNet -> "ResNet"
-                R.id.radioMobileNet -> "MobileNet"
-                else -> ""
-            }
-        apiConfigManager.setConfig(url, model)
-        showSnackbar("Configuration Saved")
-        dialog.dismiss()
     }
 
     private val updateDateTimeRunnable =

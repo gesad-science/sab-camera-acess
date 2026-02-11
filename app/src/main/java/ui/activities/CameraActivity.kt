@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.view.PreviewView
 import androidx.core.content.ContextCompat
+import api.ApiConfigManager
 import api.FaceApiHelper
 import com.google.android.material.snackbar.Snackbar
 import com.sab.cameraacess.R
@@ -32,7 +33,6 @@ class CameraActivity : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var faceOverlayView: FaceOverlayView
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
-
     private lateinit var cameraManager: CameraManager
     private lateinit var imageAnalysisHelper: ImageAnalysisHelper
     private lateinit var photoCaptureHelper: PhotoCaptureHelper
@@ -43,7 +43,7 @@ class CameraActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
-        apiUrl = intent.getStringExtra("api_url") ?: ""
+        apiUrl = ApiConfigManager.getFinalUrl()
         function = intent.getStringExtra("function") ?: ""
         userName = intent.getStringExtra("username") ?: "User"
         initViews()

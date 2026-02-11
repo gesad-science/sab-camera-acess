@@ -71,8 +71,7 @@
                             android:textColor="#4B5563"
                             android:layout_marginTop="90dp"
                             android:textSize="20sp"
-                            android:text="Smart attendance for smarter classrooms"
-
+                            android:text="@string/smart_attendance_for_smarter_classrooms"
                             />
 
                         <android.widget.Button
@@ -91,24 +90,6 @@
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.482" />
-
-                        <android.widget.Button
-                            android:id="@+id/buttonConfiguration"
-                            android:layout_width="360dp"
-                            android:layout_height="60dp"
-                            android:textSize="25sp"
-                            android:drawableStart="@drawable/settings"
-                            android:background="@drawable/bg_dialog"
-                            android:text="@string/configuration_api"
-                            android:fontFamily="sans-serif-medium"
-                            android:textColor="@color/white"
-                            android:layout_marginTop="40dp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/buttonLogout"
                             app:layout_constraintVertical_bias="0.482" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
