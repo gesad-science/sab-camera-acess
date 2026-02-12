@@ -7,7 +7,7 @@ import retrofit2.http.GET
 
 interface ApiService {
     @GET("/attendance")
-    suspend fun getPresences(): ApiResponse
+    suspend fun getPresences(): List<ApiRecord>
 }
 
 data class ApiResponse(

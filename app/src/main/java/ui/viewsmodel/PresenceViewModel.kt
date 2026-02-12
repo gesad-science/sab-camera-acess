@@ -3,9 +3,11 @@ package ui.viewsmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import api.RetrofitClient
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import model.Student
 import retrofit2.HttpException
 import java.io.IOException
@@ -18,17 +20,14 @@ class PresenceViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val response =
-                    kotlinx.coroutines.withContext(
-                        kotlinx.coroutines.Dispatchers.IO,
-                    ) {
+                    withContext(Dispatchers.IO) {
                         RetrofitClient.instance.getPresences()
                     }
 
                 val presentStudents =
-                    response.records
-                        ?.mapNotNull { it.faceName }
-                        ?.distinct()
-                        ?: emptyList()
+                    response
+                        .mapNotNull { it.faceName }
+                        .distinct()
 
                 val allStudents =
                     listOf(
@@ -36,6 +35,7 @@ class PresenceViewModel : ViewModel() {
                         Student("David Moreira", "67892", false),
                         Student("Paulo Henrique Maia", "11224", false),
                         Student("Ana Oliveira", "44556", false),
+                        Student("Guilherme", "40028", false),
                     )
 
                 _students.value =
