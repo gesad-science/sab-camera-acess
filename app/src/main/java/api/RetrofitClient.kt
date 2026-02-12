@@ -16,9 +16,9 @@ data class ApiResponse(
 )
 
 data class ApiRecord(
-    @SerializedName("face_name") val faceName: String,
+    @SerializedName("name") val faceName: String,
     val confidence: Double,
-    @SerializedName("timestamp") val timestamp: String,
+    @SerializedName("date") val timestamp: String,
 )
 
 object RetrofitClient {
