@@ -1,42 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/configuration_bottom"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp">
-        <EditText
-            android:id="@+id/inputApiUrl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autofillHints="name"
-            android:hint="@string/url_of_api"
-            android:inputType="textUri" />
+    android:layout_height="match_parent"
+    android:background="@drawable/login"
+    >
 
-        <RadioGroup
-            android:id="@+id/radioGroupModel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="4dp">
+        <androidx.cardview.widget.CardView
+            android:layout_width="620dp"
+            android:layout_height="630dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="20dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+                        <ImageView
+                            android:id="@+id/bgAvatar"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_width="135dp"
+                            android:layout_height="135dp"
+                            android:layout_marginBottom="240dp"
+                            android:contentDescription="@string/image_account"
+                            app:srcCompat="@drawable/gradient_login"
+                            />
 
-                <RadioButton
-                    android:id="@+id/radioResNet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/resnet" />
+                        <ImageView
+                            android:id="@+id/logoAvatar"
+                            android:layout_width="105dp"
+                            android:layout_height="105dp"
+                            android:contentDescription="@string/logo_account_image"
+                            app:layout_constraintStart_toStartOf="@id/bgAvatar"
+                            app:layout_constraintEnd_toEndOf="@id/bgAvatar"
+                            app:layout_constraintTop_toTopOf="@id/bgAvatar"
+                            app:layout_constraintBottom_toBottomOf="@id/bgAvatar"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_logo" />
 
-                <RadioButton
-                    android:id="@+id/radioMobileNet"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mobilenet"
-                    android:layout_marginStart="16dp"/>
-        </RadioGroup>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:text="@string/smart_attendance_board"
+                            android:textStyle="bold"
+                            android:textSize="35sp"
+                            android:textColor="#0F1963"
+                            />
+                        <TextView
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:textColor="#4B5563"
+                            android:layout_marginTop="90dp"
+                            android:textSize="20sp"
+                            android:text="@string/smart_attendance_for_smarter_classrooms"
+                            />
 
-        <Button
-            android:id="@+id/buttonSaveConfig"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:layout_marginTop="12dp" />
-</LinearLayout>
+                        <android.widget.Button
+                            android:id="@+id/buttonLogout"
+                            android:layout_width="360dp"
+                            android:layout_height="60dp"
+                            android:textSize="25sp"
+                            android:drawableStart="@drawable/streamline_login_1_remix"
+                            android:background="@drawable/bg_dialog"
+                            android:text="@string/logout"
+                            android:fontFamily="sans-serif-medium"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="250dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.482" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

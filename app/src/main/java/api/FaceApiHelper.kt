@@ -40,7 +40,7 @@ object FaceApiHelper {
             try {
                 val byteArray = bitmap.toByteArray()
                 val base64 = Base64.encodeToString(byteArray, Base64.NO_WRAP)
-                val json = """{"image_base64":"$base64"}"""
+                val json = """{"base64":"$base64"}"""
                 LogHelper.log(context, "Sending face #$index: ${json.take(LIMIT_JSON)}...")
                 val body = json.toRequestBody("application/json; charset=utf-8".toMediaType())
                 val request =

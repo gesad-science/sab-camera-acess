@@ -1,125 +1,559 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient"
+    android:background="#F9FAFB"
     tools:context="ui.activities.HomeActivity">
 
-    <ImageView
-        android:id="@+id/imageCall"
-        android:layout_width="477dp"
-        android:layout_height="271dp"
-        android:contentDescription="@string/image_home_page_app"
-        android:src="@drawable/image_call"
-        app:layout_constraintBottom_toTopOf="@+id/textViewTitle"
-        app:layout_constraintDimensionRatio="1:1"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/bg_border"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.5" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <android.widget.Button
-        android:id="@+id/buttonLogout"
-        android:layout_width="246dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="260dp"
-        android:background="@drawable/bg_dialog"
-        android:drawableEnd="@drawable/icon_logout"
-        android:text="@string/logout"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCamera"
-        app:layout_constraintVertical_bias="0.401" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-    <android.widget.Button
-        android:id="@+id/buttonCamera"
-        android:layout_width="246dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/bg_dialog"
-        android:drawableEnd="@drawable/icon_camera"
-        android:text="@string/register_attendance"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.625" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textViewTitle"
-        android:layout_width="246dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="296dp"
-        android:fontFamily="sans-serif-medium"
-        android:text="@string/face_detection_system"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/textNameProject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:layout_marginBottom="30dp"
+                android:text="@string/smart_attendance_board"
+                android:textColor="@color/purple_text"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textWelcome"
-        android:layout_width="0dp"
+            <TextView
+                android:id="@+id/subtitleNameProject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="35dp"
+                android:layout_marginEnd="180dp"
+                android:text="@string/student_attendance_management"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textNameProject" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="318dp"
+            android:layout_height="57dp"
+            android:layout_marginEnd="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/usernameAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mr_paulo_henrique"
+                android:textColor="#1F2937"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="15dp"
+                />
+            <TextView
+                android:id="@+id/nameSubject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="@string/extens_o_3"
+                android:textColor="#4B5563"
+                android:layout_marginEnd="90dp"
+                app:layout_constraintEnd_toEndOf="@+id/bgAccount"
+                app:layout_constraintTop_toTopOf="@id/usernameAccount" />
+
+            <ImageView
+                android:id="@+id/bgAccount"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="60dp"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/image_account"
+                app:srcCompat="@drawable/bg_account"
+                />
+
+            <ImageView
+                android:id="@+id/logoAccount"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="@string/logo_account_image"
+                app:layout_constraintStart_toStartOf="@id/bgAccount"
+                app:layout_constraintEnd_toEndOf="@id/bgAccount"
+                app:layout_constraintTop_toTopOf="@id/bgAccount"
+                app:layout_constraintBottom_toBottomOf="@id/bgAccount"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_logo"
+                tools:layout_editor_absoluteX="236dp"
+                tools:layout_editor_absoluteY="18dp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/boxWelcome"
+        android:layout_width="1078dp"
+        android:layout_height="210dp"
+        android:layout_marginTop="55dp"
+        android:background="@drawable/gradient"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/textWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@string/welcome_back_mr_paulo_henrique"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="40dp"
+            android:textSize="20sp"
+            android:text="@string/ready_to_take_attendance_for_today_s_class"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:orientation="vertical"
+            android:layout_marginEnd="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/bg_date">
+
+            <TextView
+                android:id="@+id/textToday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/today_s_date"
+                android:textColor="#DBEAFE"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textDate"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textToday"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="35sp"
+                android:text="@string/jan_19_2026"
+            />
+
+            <TextView
+                android:id="@+id/textTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/textDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:text="@string/_8_24_am"
+                android:layout_marginTop="40dp"
+            />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="355dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="25dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/totalStudents"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/total_students"
+                    android:textSize="16sp"
+                    android:textColor="#4B5563"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="7dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="14dp"
+                    android:text="@string/_32"
+                    android:textSize="38sp"
+                    android:textStyle="bold"
+                    android:textColor="#0F1963"
+                    />
+
+            <ImageView
+                android:id="@+id/bgStudents"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="20dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/students_image"
+                app:srcCompat="@drawable/bg_students"
+                />
+
+            <ImageView
+                android:id="@+id/logoStudents"
+                android:layout_width="24dp"
+                android:layout_height="29dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/logo_account_image"
+                app:layout_constraintBottom_toBottomOf="@id/bgStudents"
+                app:layout_constraintEnd_toEndOf="@id/bgStudents"
+                app:layout_constraintStart_toStartOf="@id/bgStudents"
+                app:layout_constraintTop_toTopOf="@id/bgStudents"
+                app:srcCompat="@drawable/ic_students" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="355dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="25dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/totalPresents"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/present_today"
+                android:textSize="16sp"
+                android:textColor="#4B5563"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="7dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="14dp"
+                android:text="@string/_28"
+                android:textSize="38sp"
+                android:textStyle="bold"
+                android:textColor="#00A63D"
+                />
+            <ImageView
+                android:id="@+id/bgPresent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="20dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/students_image"
+                app:srcCompat="@drawable/bg_presents"
+                />
+
+            <ImageView
+                android:id="@+id/logoPresent"
+                android:layout_width="38dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/present_image"
+                app:layout_constraintBottom_toBottomOf="@id/bgPresent"
+                app:layout_constraintEnd_toEndOf="@id/bgPresent"
+                app:layout_constraintStart_toStartOf="@id/bgPresent"
+                app:layout_constraintTop_toTopOf="@id/bgPresent"
+                app:srcCompat="@drawable/ic_presents" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="355dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="25dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/attendanceRate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/attendance_rate"
+                android:textSize="16sp"
+                android:textColor="#4B5563"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="7dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="14dp"
+                android:text="@string/_87_5"
+                android:textSize="38sp"
+                android:textStyle="bold"
+                android:textColor="#AD2400"
+                />
+            <ImageView
+                android:id="@+id/bgAttendanceRate"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="20dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/students_image"
+                app:srcCompat="@drawable/bg_attendance_rate"
+                />
+
+            <ImageView
+                android:id="@+id/logoAttendanceRate"
+                android:layout_width="38dp"
+                android:layout_height="33dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/present_image"
+                app:layout_constraintBottom_toBottomOf="@id/bgAttendanceRate"
+                app:layout_constraintEnd_toEndOf="@id/bgAttendanceRate"
+                app:layout_constraintStart_toStartOf="@id/bgAttendanceRate"
+                app:layout_constraintTop_toTopOf="@id/bgAttendanceRate"
+                app:srcCompat="@drawable/ic_attendance_rate" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
+
+<TextView
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:text="@string/quick_actions"
+    android:textStyle="bold"
+    android:textColor="#1E1E1E"
+    android:textSize="23sp"
+    android:layout_marginTop="23dp"
+    android:layout_marginStart="110dp"
+    />
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome, Paulo Henrique !"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonCamera"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"
-        app:layout_constraintVertical_bias="0.289" />
-
-    <android.widget.Button
-        android:id="@+id/buttonRollCall"
-        android:layout_width="246dp"
-        android:layout_height="53dp"
-        android:layout_marginBottom="190dp"
-        android:background="@drawable/bg_dialog"
-        android:drawableEnd="@drawable/icon_check"
-        android:text="@string/validate_attendance"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonCamera"
-        app:layout_constraintVertical_bias="0.24" />
-
-    <ImageView
-        android:id="@+id/buttonConfiguration"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="10dp"
-        android:clickable="true"
-        android:contentDescription="@string/button_of_camera_configuration"
-        android:focusable="true"
-        android:src="@drawable/settings"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="129dp"
-        android:layout_height="75dp"
-        android:layout_marginBottom="48dp"
-        android:src="@drawable/engrenagemlogo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLogout"
-        app:layout_constraintVertical_bias="0.945" />
+        android:layout_marginTop="30dp">
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- android:id="@+id/buttonCamera" -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="180dp"
+            android:layout_width="510dp"
+            android:layout_marginStart="100dp"
+            android:background="@drawable/bg_button_register">
+            <ImageView
+                android:id="@+id/buttonCamera"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="90dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:contentDescription="@string/students_image"
+                app:srcCompat="@drawable/bg_register_icon"
+                />
+
+            <ImageView
+                android:id="@+id/iconButtonCamera"
+                android:layout_width="42dp"
+                android:layout_height="47dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/logo_register_attendance_button"
+                app:layout_constraintBottom_toBottomOf="@id/buttonCamera"
+                app:layout_constraintEnd_toEndOf="@id/buttonCamera"
+                app:layout_constraintStart_toStartOf="@id/buttonCamera"
+                app:layout_constraintTop_toTopOf="@id/buttonCamera"
+                app:srcCompat="@drawable/ic_register_attendance" />
+            <TextView
+                android:id="@+id/subtitle"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="38dp"
+                android:textColor="#DBEAFE"
+                android:text="@string/start_facial_recognition_based_attendance"
+                android:textSize="16sp"
+
+                />
+
+            <TextView
+                android:id="@id/title"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="26dp"
+                android:textColor="#DBEAFE"
+                android:textStyle="bold"
+                android:text="@string/register_attendance_title"
+                android:textSize="24sp"
+
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- android:id="@+id/buttonRollCall" -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="180dp"
+            android:layout_width="510dp"
+            android:layout_marginStart="65dp"
+            android:background="@drawable/bg_button_validate">
+            <ImageView
+                android:id="@+id/buttonRollCall"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="90dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:contentDescription="@string/students_image"
+                app:srcCompat="@drawable/bg_register_icon"
+                />
+
+            <ImageView
+                android:id="@+id/iconButtonRoll"
+                android:layout_width="42dp"
+                android:layout_height="47dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/logo_register_attendance_button"
+                app:layout_constraintBottom_toBottomOf="@id/buttonRollCall"
+                app:layout_constraintEnd_toEndOf="@id/buttonRollCall"
+                app:layout_constraintStart_toStartOf="@id/buttonRollCall"
+                app:layout_constraintTop_toTopOf="@id/buttonRollCall"
+                app:srcCompat="@drawable/ic_validate_attendance"/>
+            <TextView
+                android:id="@+id/subtitleRoll"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="38dp"
+                android:textColor="#DBEAFE"
+                android:text="@string/open_the_school_attendance_list"
+                android:textSize="18sp"
+
+                />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/subtitleRoll"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="26dp"
+                android:textColor="#DBEAFE"
+                android:textStyle="bold"
+                android:text="@string/validate_attendance_title"
+                android:textSize="28sp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

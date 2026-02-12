@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                 UserDatabase.getDatabase(this@MainActivity).userDao(),
             ).registerDefaultUser()
         }
+
         val button = findViewById<Button>(R.id.buttonLogin)
         button.setOnClickListener {
             showLoginDialog()

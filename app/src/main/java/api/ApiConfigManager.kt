@@ -1,29 +1,10 @@
 package api
 
-import android.content.Context
+object ApiConfigManager {
+    private const val BASE_URL = "https://nonpossibly-aspish-fletcher.ngrok-free.dev/mock/classify"
+    private const val MODEL_NAME = "mock"
 
-class ApiConfigManager(
-    private val context: Context,
-) {
-    private val prefs =
-        context.getSharedPreferences(
-            "api_config",
-            Context.MODE_PRIVATE,
-        )
+    fun getFinalUrl(): String = BASE_URL
 
-    fun setConfig(
-        url: String,
-        model: String,
-    ) {
-        val finalUrl = "$url/v1/$model"
-        prefs.edit().apply {
-            putString("api_url", finalUrl)
-            putString("model_name", model)
-            apply()
-        }
-    }
-
-    fun getFinalUrl(): String = prefs.getString("api_url", "") ?: ""
-
-    fun getModelName(): String = prefs.getString("model_name", "") ?: ""
+    fun getModelName(): String = MODEL_NAME
 }

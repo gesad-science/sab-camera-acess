@@ -3,9 +3,11 @@ package ui.viewsmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import api.RetrofitClient
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import model.Student
 import retrofit2.HttpException
 import java.io.IOException
@@ -17,11 +19,14 @@ class PresenceViewModel : ViewModel() {
     fun loadPresences() {
         viewModelScope.launch {
             try {
-                val response = RetrofitClient.instance.getPresences()
+                val response =
+                    withContext(Dispatchers.IO) {
+                        RetrofitClient.instance.getPresences()
+                    }
+
                 val presentStudents =
                     response
-                        .records
-                        .map { it.faceName }
+                        .mapNotNull { it.faceName }
                         .distinct()
 
                 val allStudents =
@@ -30,17 +35,19 @@ class PresenceViewModel : ViewModel() {
                         Student("David Moreira", "67892", false),
                         Student("Paulo Henrique Maia", "11224", false),
                         Student("Ana Oliveira", "44556", false),
+                        Student("Guilherme", "40028", false),
                     )
-                val updatedList =
-                    allStudents
-                        .map { student ->
-                            student.copy(present = presentStudents.contains(student.name))
-                        }
-                _students.value = updatedList
+
+                _students.value =
+                    allStudents.map { student ->
+                        student.copy(present = presentStudents.contains(student.name))
+                    }
             } catch (e: IOException) {
-                e.printStackTrace()
+                android.util.Log.e("PresenceViewModel", "Erro de IO", e)
+                _students.value = emptyList()
             } catch (e: HttpException) {
-                e.printStackTrace()
+                android.util.Log.e("PresenceViewModel", "Erro HTTP", e)
+                _students.value = emptyList()
             }
         }
     }
