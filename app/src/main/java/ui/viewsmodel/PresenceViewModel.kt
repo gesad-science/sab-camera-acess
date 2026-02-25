@@ -33,7 +33,7 @@ class PresenceViewModel : ViewModel() {
                     listOf(
                         Student("CamilaPinheiro", "12341", false),
                         Student("DavidMoreira", "67892", false),
-                        Student("Paulo Henrique Maia", "11224", false),
+                        Student("PedroLuna", "11224", false),
                         Student("AlanBandeira", "44556", false),
                         Student("GuilhermeGaspar", "40028", false),
                     )
