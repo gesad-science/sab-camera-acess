@@ -13,6 +13,7 @@ class UserRepository(
     ): User? = dao.login(username, password, function)
 
     suspend fun registerDefaultUser() {
+        dao.insert(User(username = "adm", password = "adm", function = "Administrator"))
         dao.insert(User(username = "Paulo Henrique", password = "123321", function = "Administrator"))
         dao.insert(User(username = "Guilherme Gaspar", password = "45654", function = "User"))
     }

@@ -31,11 +31,11 @@ class PresenceViewModel : ViewModel() {
 
                 val allStudents =
                     listOf(
-                        Student("Camila Pinheiro", "12341", false),
-                        Student("David Moreira", "67892", false),
-                        Student("Paulo Henrique Maia", "11224", false),
-                        Student("Ana Oliveira", "44556", false),
-                        Student("Guilherme", "40028", false),
+                        Student("CamilaPinheiro", "12341", false),
+                        Student("DavidMoreira", "67892", false),
+                        Student("PedroLuna", "11224", false),
+                        Student("AlanBandeira", "44556", false),
+                        Student("GuilhermeGaspar", "40028", false),
                     )
 
                 _students.value =
